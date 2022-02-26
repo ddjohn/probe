@@ -1,0 +1,23 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+        maven {
+            url "http://10.236.88.232:8088/artifactory/maven-google/"
+            allowInsecureProtocol = true
+        }
+        maven {
+            url "http://10.236.88.232:8088/artifactory/maven"
+            allowInsecureProtocol = true
+        }
+        maven {
+            url "http://10.236.88.232:8088/artifactory/aptiv-libraries/"
+            allowInsecureProtocol = true
+        }
+    }
+}
+rootProject.name = "DownloadMgr"
+include ':app'
+include ':shadow-classes'
