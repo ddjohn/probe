@@ -18,6 +18,7 @@ import android.car.Car;
 import android.car.VehiclePropertyIds;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.property.CarPropertyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import android.location.OnNmeaMessageListener;
 import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
 import android.media.AudioPlaybackCaptureConfiguration;
+import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.net.ConnectivityManager;
@@ -78,6 +80,8 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
 
+
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("New carplay session...").setTitle("Carplay");
         builder.setPositiveButton("connect", (dialog, id) -> {
@@ -89,7 +93,7 @@ public class MyService extends Service {
         AlertDialog dialog = builder.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
-
+*/
     /*
         //unsigned int deviceScreenScale() const override;
         Log.e(TAG,"deviceScreenScale: " + dm.scaledDensity);
