@@ -8,31 +8,41 @@ import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.DownloadManager;
 import android.app.Service;
+import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.car.Car;
 import android.car.VehiclePropertyIds;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.property.CarPropertyManager;
+import android.car.navigation.CarNavigationStatusManager;
+import android.companion.AssociationRequest;
+import android.companion.CompanionDeviceManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.icu.util.LocaleData;
 import android.icu.util.ULocale;
 import android.location.LocationManager;
 import android.location.OnNmeaMessageListener;
 import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
+import android.media.projection.MediaProjectionManager;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.DropBoxManager;
 import android.os.Environment;
 import android.os.IBinder;
@@ -50,11 +60,33 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 public class MyService extends Service {
     private static final String TAG = MyService.class.getCanonicalName();
@@ -62,13 +94,99 @@ public class MyService extends Service {
     public MyService() {
     }
 
+    public void test() {
+        DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+
+        String url = "https://www.sygic.com/assets/enterprise/img/Sygic_logo.svg";
+        //String url = "file://data/local/tmp/Sygic_logo.svg";
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setTitle("Title");
+        request.setDescription("Description");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DCIM, "Sygic_logo.svg");
+        manager.enqueue(request);
+
+        DownloadManager.Query query = new DownloadManager.Query();
+        Cursor cursor = manager.query(query);
+        Log.e(TAG, "count=" + cursor.getCount());
+        while (cursor.moveToNext()) {
+            Log.e(TAG, "name=" + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION)) + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)));
+        }
+        cursor.close();
+
+/*
+        Log.e(TAG, "----------------");
+
+        File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies");
+        Log.e(TAG, "dir=" + f.isDirectory());
+        Log.e(TAG, "dir=" + f.mkdirs());
+        Log.e(TAG, "" + !(f.isDirectory() || f.mkdirs()));
+        Log.e(TAG, "----------------");
+
+
+        final File file = new File(Uri.parse("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies").getPath());
+        Log.e(TAG, "file=" + file);
+        File parent = file.getParentFile().getAbsoluteFile();
+        Log.e(TAG, "parent=" + parent);
+        File[] parentTest = new File[] { parent };
+        String name = file.getName();
+        Log.e(TAG, "file=" + name);
+
+        // Ensure target directories are ready
+        for (File test : parentTest) {
+            Log.e(TAG, "Scan " + test);
+            Log.e(TAG, "Scan " + test.isDirectory());
+            Log.e(TAG, "Scan " + test.mkdirs());
+            if (!(test.isDirectory() || test.mkdirs())) {
+                Log.e(TAG, "Failed to create parent for " + test);
+                //throw new IOException("Failed to create parent for " + test);
+            }
+        }
+
+
+
+*/
+/*
+        try {
+            File testDir = new File(this.getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + "maps");
+            Log.e(TAG, "path=" + testDir);
+            Log.e(TAG, "Create directory: " + testDir.mkdirs());
+            File testFile = new File(testDir, "testmap.txt");
+            Log.e(TAG, "path=" + testFile);
+            FileOutputStream stream = new FileOutputStream(testFile);
+            stream.write("hello world".getBytes());
+            stream.close();
+        }
+        catch(Exception e) {
+            Log.e(TAG, "exception", e);
+        }
+*/
+        Log.e(TAG, "----------------");
+
+    }
+
     //@RequiresApi(api = Build.VERSION_CODES.R)
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "Range"})
     @Override
     public void onCreate() {
         super.onCreate();
 
+        test();
 
+        ComponentName componentName = new ComponentName(this, MyReceiver.class);
+
+
+        //BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        //adapter.enable();
+        //adapter.getSupportedProfiles();
+        //Log.e(TAG, "" + android.bluetooth.BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
+
+        // MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+
+
+        //TetheringManager tetheringManager; // = this.getSystemService(Context)
+        //tetheringManager.
         /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("New carplay session...").setTitle("Carplay");
@@ -81,14 +199,29 @@ public class MyService extends Service {
         AlertDialog dialog = builder.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
-*/
-    /*
+       */
+        /*
+        KeyStore store = getSystemService(Context.KEYGUARD_SERVICE);
+        //store.importKey("root", new byte[] {0, 0, 22});
+        //store.importKey("root", new byte[] {0, 0, 22});
+        //store.importKey("root", new byte[] {0, 0, 22});
+
+        try {
+            Certificate rootCert = store.getCertificate("aauto_root");
+            Certificate clientCert = store.getCertificate("aauto_client");
+            Certificate certCertificate = store.getCertificate("aauto_cert");
+        }
+        catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+
+        */
+        /*
         //unsigned int deviceScreenScale() const override;
         Log.e(TAG,"deviceScreenScale: " + dm.scaledDensity);
 
         //std::string deviceModelyear() const override;
-*/
-
+        */
 
         //accessibilityManager();
         //accountManager();
@@ -97,11 +230,15 @@ public class MyService extends Service {
         //audioManager();
         //bluetoothManager();
         //build();
+        //carNavigationStatusManager();
         //carPropertyManager();
+        //companionDeviceManager();
         //connectivityManager();
+        //devicePolicyManager(componentName);
         //downloadManager();
         //dropboxManager();
-        environment();
+        //environment();
+        //keyStore();
         //locale();
         //locationManager();
         //mediaSession();
@@ -109,20 +246,94 @@ public class MyService extends Service {
         //secureSettings();
         //storageManager();
         //systemProperties();
+        //systemSettings();
         //telecomManager();
         //telephonyService();
         //wifiManager();
+        //updateManager();
         //windowManager();
     }
 
+
+
+    /*
+        static String generateSaveFile(Context context, String url, String hint,
+                                       String contentDisposition, String contentLocation, String mimeType, int destination)
+                throws IOException {
+
+            final File parent;
+            final File[] parentTest;
+            String name = null;
+
+            if (destination == Downloads.Impl.DESTINATION_FILE_URI) {
+                final File file = new File(Uri.parse(hint).getPath());
+                parent = file.getParentFile().getAbsoluteFile();
+                parentTest = new File[] { parent };
+                name = file.getName();
+            } else {
+                parent = getRunningDestinationDirectory(context, destination);
+                parentTest = new File[] {
+                        parent,
+                        getSuccessDestinationDirectory(context, destination)
+                };
+                name = chooseFilename(url, hint, contentDisposition, contentLocation);
+            }
+
+            // Ensure target directories are ready
+            for (File test : parentTest) {
+                if (!(test.isDirectory() || test.mkdirs())) {
+                    throw new IOException("Failed to create parent for " + test);
+                }
+            }
+
+            if (DownloadDrmHelper.isDrmConvertNeeded(mimeType)) {
+                name = DownloadDrmHelper.modifyDrmFwLockFileExtension(name);
+            }
+
+            final String prefix;
+            final String suffix;
+            final int dotIndex = name.lastIndexOf('.');
+            final boolean missingExtension = dotIndex < 0;
+            if (destination == Downloads.Impl.DESTINATION_FILE_URI) {
+                // Destination is explicitly set - do not change the extension
+                if (missingExtension) {
+                    prefix = name;
+                    suffix = "";
+                } else {
+                    prefix = name.substring(0, dotIndex);
+                    suffix = name.substring(dotIndex);
+                }
+            } else {
+                // Split filename between base and extension
+                // Add an extension if filename does not have one
+                if (missingExtension) {
+                    prefix = name;
+                    suffix = chooseExtensionFromMimeType(mimeType, true);
+                } else {
+                    prefix = name.substring(0, dotIndex);
+                    suffix = chooseExtensionFromFilename(mimeType, destination, name, dotIndex);
+                }
+            }
+
+            synchronized (sUniqueLock) {
+                name = generateAvailableFilenameLocked(parentTest, prefix, suffix);
+
+                // Claim this filename inside lock to prevent other threads from
+                // clobbering us. We're not paranoid enough to use O_EXCL.
+                final File file = new File(parent, name);
+                file.createNewFile();
+                return file.getAbsolutePath();
+            }
+        }
+    */
     private void accessibilityManager() {
         AccessibilityManager accessibility = (AccessibilityManager)getSystemService(Context.ACCESSIBILITY_SERVICE);
-        accessibility.getEnabledAccessibilityServiceList(AccessibilityManager.FLAG_CONTENT_TEXT).forEach(service -> {
+        /*accessibility.getEnabledAccessibilityServiceList(AccessibilityManager.FLAG_CONTENT_TEXT).forEach(service -> {
             Log.e(TAG, "service=" + service);
         });
         accessibility.getInstalledAccessibilityServiceList().forEach(instance -> {
             Log.e(TAG, "instance=" + instance);
-        });
+        });*/
     }
     private void accountManager() {
         AccountManager account = (AccountManager)getSystemService(Context.ACCOUNT_SERVICE);
@@ -135,9 +346,9 @@ public class MyService extends Service {
     }
     private void activityManager() {
         ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-        //for(ActivityManager.AppTask task : activityManager.getAppTasks()) {
-        //    Log.e(TAG, "task=" + task.getTaskInfo());
-        //}
+        for(ActivityManager.AppTask task : activityManager.getAppTasks()) {
+            Log.e(TAG, "task=" + task.getTaskInfo());
+        }
         activityManager.getRecentTasks(10, 0).forEach(task -> {
             Log.e(TAG, "recent=" + task.baseIntent.getComponent());
         });
@@ -180,12 +391,22 @@ public class MyService extends Service {
 
         //Log.e(TAG, "" + BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
         //List<?> profiles = adapter.getSupportedProfiles();
+
+        //adapter.getSupportedProfiles();
     }
     private void build() {
         Log.e(TAG, "deviceMake=" + Build.MANUFACTURER);
         Log.e(TAG, "deviceName=" + Build.DEVICE);
         Log.e(TAG, "deviceName=" + Build.MODEL);
         Log.e(TAG, "version=Android " + Build.VERSION.RELEASE);
+    }
+    private void carNavigationStatusManager() {
+        Car car = Car.createCar(this);
+        CarNavigationStatusManager carNavigationStatusManager = (CarNavigationStatusManager)car.getCarManager(Car.CAR_NAVIGATION_SERVICE);
+
+        Bundle bundle = new Bundle();
+        carNavigationStatusManager.sendNavigationStateChange(bundle);
+        // NavigationStateProto proto;
     }
     private void carPropertyManager() {
         Car car = Car.createCar(this);
@@ -209,6 +430,12 @@ public class MyService extends Service {
             }
         }, VehiclePropertyIds.INFO_MAKE, CarPropertyManager.SENSOR_RATE_UI);
     }
+    private void companionDeviceManager() {
+        CompanionDeviceManager companionDeviceManager = (CompanionDeviceManager)getSystemService(Context.COMPANION_DEVICE_SERVICE);
+        companionDeviceManager.getAssociations().forEach(phone -> {
+            Log.e(TAG, "phone=" + phone);
+        });
+    }
     private void connectivityManager() {
         ConnectivityManager connectivity = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         Log.e(TAG, "activity=" + connectivity.getActiveNetwork());
@@ -217,29 +444,60 @@ public class MyService extends Service {
             Log.e(TAG, "network=" + network);
         }
     }
+    private void devicePolicyManager(ComponentName componentName) {
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
+        Log.e(TAG, "Admins:");
+        for(ComponentName name : devicePolicyManager.getActiveAdmins()) {
+            Log.e(TAG, "name=" + name);
+        }
+        devicePolicyManager.lockNow();
+        //devicePolicyManager.setOrganizationId("Aptiv");
+        //devicePolicyManager.setOrganizationName("", "Aptiv");
+        //Log.e(TAG, "failed logins=" + devicePolicyManager.getCurrentFailedPasswordAttempts());
+        //devicePolicyManager.
+        Log.e(TAG, "isAdmin=" + devicePolicyManager.isAdminActive(componentName));
+    }
     private void downloadManager() {
-        DownloadManager manager =(DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        //request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        //request.setAllowedOverRoaming(false);
+        //request.allowScanningByMediaScanner();
+        //request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "habba.jpg");
+        //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_ALARMS, "habba.jpg");
+        //request.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Downloads" + File.separator + "a.jpg")));
 
-        String url = "https://get.jenkins.io/war-stable/2.319.2/jenkins.war";
+        //Log.e(TAG, "request=" + request.toString());
+
+        DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+
+        String url = "https://www.sygic.com/assets/enterprise/img/Sygic_logo.svg";
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle("Title");
-        request.setDescription("Weird Description");
-        request.allowScanningByMediaScanner();
+        request.setDescription("Description");
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-        String filename = URLUtil.guessFileName(url,null, MimeTypeMap.getFileExtensionFromUrl(url));
+        request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_MOVIES, "Sygic_logo.svg");
+        manager.enqueue(request);
+
+        DownloadManager.Query query = new DownloadManager.Query();
+        Cursor cursor = manager.query(query);
+        Log.e(TAG, "count=" + cursor.getCount());
+        while (cursor.moveToNext()) {
+            Log.e(TAG, "name=" + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION)) + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)));
+        }
+        cursor.close();
+
+//        String filename = URLUtil.guessFileName(url,null, MimeTypeMap.getFileExtensionFromUrl(url));
 
         //Uri uri = Uri.parse("file:///data/media/0/Android/data/com.aptiv.got.downloadmgr/files/" + filename);
         //Log.e(TAG, "getFilesDir=" + getFilesDir());
         //Log.e(TAG, "getExternalFilesDir=" + getExternalFilesDir("test"));
         //Log.e(TAG, "getExternalFilesDirs=" + getExternalFilesDirs("test")[0]);
-
+/*
         for(File f : this.getExternalFilesDirs(null)) {
             Log.e(TAG, "path=" + f);
         }
 
         // Emulated storage
-        //request.setDestinationInExternalFilesDir(this, "/data/oem_data/", filename);
 
         // Unsupported part
         //Uri uri = Uri.parse("file:///data/oem_data/" + File.separator + filename);
@@ -248,8 +506,7 @@ public class MyService extends Service {
         Log.e(TAG, "aaa=" + f.exists());
         File file = new File("/data/oem_data/", filename);
         request.setDestinationUri(Uri.fromFile(file));
-
-        manager.enqueue(request);
+*/
     }
     private void dropboxManager() {
         DropBoxManager dropboxManager = (DropBoxManager)getSystemService(Context.DROPBOX_SERVICE);
@@ -267,6 +524,57 @@ public class MyService extends Service {
         Log.e(TAG, "dir=" + Environment.getRootDirectory());
         Log.e(TAG, "dir=" + Environment.getDownloadCacheDirectory());
         Log.e(TAG, "dir=" + Environment.getDataDirectory());
+    }
+    private void keyStore() {
+        String cert = "-----BEGIN CERTIFICATE-----\n" +
+                "MIICEjCCAXsCAg36MA0GCSqGSIb3DQEBBQUAMIGbMQswCQYDVQQGEwJKUDEOMAwG\n" +
+                "A1UECBMFVG9reW8xEDAOBgNVBAcTB0NodW8ta3UxETAPBgNVBAoTCEZyYW5rNERE\n" +
+                "MRgwFgYDVQQLEw9XZWJDZXJ0IFN1cHBvcnQxGDAWBgNVBAMTD0ZyYW5rNEREIFdl\n" +
+                "YiBDQTEjMCEGCSqGSIb3DQEJARYUc3VwcG9ydEBmcmFuazRkZC5jb20wHhcNMTIw\n" +
+                "ODIyMDUyNjU0WhcNMTcwODIxMDUyNjU0WjBKMQswCQYDVQQGEwJKUDEOMAwGA1UE\n" +
+                "CAwFVG9reW8xETAPBgNVBAoMCEZyYW5rNEREMRgwFgYDVQQDDA93d3cuZXhhbXBs\n" +
+                "ZS5jb20wXDANBgkqhkiG9w0BAQEFAANLADBIAkEAm/xmkHmEQrurE/0re/jeFRLl\n" +
+                "8ZPjBop7uLHhnia7lQG/5zDtZIUC3RVpqDSwBuw/NTweGyuP+o8AG98HxqxTBwID\n" +
+                "AQABMA0GCSqGSIb3DQEBBQUAA4GBABS2TLuBeTPmcaTaUW/LCB2NYOy8GMdzR1mx\n" +
+                "8iBIu2H6/E2tiY3RIevV2OW61qY2/XRQg7YPxx3ffeUugX9F4J/iPnnu1zAxxyBy\n" +
+                "2VguKv4SWjRFoRkIfIlHX0qVviMhSlNy2ioFLy7JcPZb+v3ftDGywUqcBiVDoea0\n" +
+                "Hn+GmxZA\n" +
+                "-----END CERTIFICATE-----";
+
+        String rootCert = cert;
+        String clientCert = cert;
+        String certCert = cert;
+
+        try {
+            {
+                // Diagnostic Routine
+                KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+                keyStore.load(null);
+
+                CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                keyStore.setCertificateEntry("root_alias", cf.generateCertificate(new ByteArrayInputStream(rootCert.getBytes())));
+                keyStore.setCertificateEntry("client_alias", cf.generateCertificate(new ByteArrayInputStream(clientCert.getBytes())));
+                keyStore.setCertificateEntry("cert_alias", cf.generateCertificate(new ByteArrayInputStream(certCert.getBytes())));
+            }
+
+            // Android Auto
+            {
+                KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+                keyStore.load(null);
+
+                Enumeration<String> aliases = keyStore.aliases();
+                while(aliases.hasMoreElements()) {
+                    Log.e(TAG, "alias=" + aliases.nextElement());
+                }
+
+                Log.e(TAG, "root=" + keyStore.getCertificate("root_alias"));
+                Log.e(TAG, "root=" + keyStore.getCertificate("cert_alias"));
+                Log.e(TAG, "root=" + keyStore.getCertificate("client_alias"));
+            }
+        }
+        catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
     private void locale() {
         Log.e(TAG, "locale=" + Locale.getDefault());
@@ -310,6 +618,8 @@ public class MyService extends Service {
         List<MediaController> list = sessionManager.getActiveSessions(null);
         for(MediaController l : list) {
             Log.e(TAG, "" + l);
+            Bundle b = l.getExtras();
+            String devicename = (String)b.get("DEVIC_NAME");
         }
     }
     private void packageManager() {
@@ -329,16 +639,21 @@ public class MyService extends Service {
     private void storageManager() {
         StorageManager storage = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
         Log.e(TAG, "primary=" + storage.getPrimaryStorageVolume());
-        /*for(StorageVolume volume : storage.getRecentStorageVolumes()) {
-            Log.e(TAG, "volume=" + volume);
-        }*/
+        //for(StorageVolume volume : storage.getRecentStorageVolumes()) {
+        //    Log.e(TAG, "volume=" + volume);
+        //}
     }
     private void systemProperties() {
         String text = SystemProperties.get("ro.build.user");
         Log.e(TAG, "text=" + text);
     }
+    private void systemSettings() {
+        Log.e(TAG, "autotime: " + Settings.System.getString(getContentResolver(), Settings.System.AUTO_TIME));
+        Settings.System.putInt(getContentResolver(), Settings.System.AUTO_TIME, 0);
+        Log.e(TAG, "autotime: " + Settings.System.getString(getContentResolver(), Settings.System.AUTO_TIME));
+    }
     private void telecomManager() {
-        final TelecomManager telecomManager = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
+        final TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
 
         // PhoneAccountHandle phoneAccountHandle = new PhoneAccountHandle(new ComponentName(this.getApplicationContext(), MyService.class), "example");
         //PhoneAccount phoneAccount = PhoneAccount.builder(phoneAccountHandle, "example").setCapabilities(PhoneAccount.CAPABILITY_CALL_PROVIDER).build();
@@ -359,6 +674,22 @@ public class MyService extends Service {
     private void telephonyService() {
         TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         Log.e(TAG, "mobileCarrier=" + telephony.getNetworkOperatorName());
+    }
+    private void updateManager() {
+        UpdateEngine updateEngine = new UpdateEngine();
+        Log.e(TAG, "updateEngine=" + updateEngine);
+
+        updateEngine.bind(new UpdateEngineCallback() {
+
+            @Override
+            public void onStatusUpdate(int i, float v) {
+            }
+
+            @Override
+            public void onPayloadApplicationComplete(int i) {
+            }
+        });
+        updateEngine.applyPayload("file:///data/ota_package/payload.bin",0, 22112, getInfo());
     }
     @SuppressLint("MissingPermission")
     private void wifiManager() {
@@ -388,3 +719,64 @@ public class MyService extends Service {
         return null;
     }
 }
+
+/*
+    AsyncTask task = new AsyncTask() {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                String cert = "-----BEGIN CERTIFICATE-----\n" +
+                        "MIICEjCCAXsCAg36MA0GCSqGSIb3DQEBBQUAMIGbMQswCQYDVQQGEwJKUDEOMAwG\n" +
+                        "A1UECBMFVG9reW8xEDAOBgNVBAcTB0NodW8ta3UxETAPBgNVBAoTCEZyYW5rNERE\n" +
+                        "MRgwFgYDVQQLEw9XZWJDZXJ0IFN1cHBvcnQxGDAWBgNVBAMTD0ZyYW5rNEREIFdl\n" +
+                        "YiBDQTEjMCEGCSqGSIb3DQEJARYUc3VwcG9ydEBmcmFuazRkZC5jb20wHhcNMTIw\n" +
+                        "ODIyMDUyNjU0WhcNMTcwODIxMDUyNjU0WjBKMQswCQYDVQQGEwJKUDEOMAwGA1UE\n" +
+                        "CAwFVG9reW8xETAPBgNVBAoMCEZyYW5rNEREMRgwFgYDVQQDDA93d3cuZXhhbXBs\n" +
+                        "ZS5jb20wXDANBgkqhkiG9w0BAQEFAANLADBIAkEAm/xmkHmEQrurE/0re/jeFRLl\n" +
+                        "8ZPjBop7uLHhnia7lQG/5zDtZIUC3RVpqDSwBuw/NTweGyuP+o8AG98HxqxTBwID\n" +
+                        "AQABMA0GCSqGSIb3DQEBBQUAA4GBABS2TLuBeTPmcaTaUW/LCB2NYOy8GMdzR1mx\n" +
+                        "8iBIu2H6/E2tiY3RIevV2OW61qY2/XRQg7YPxx3ffeUugX9F4J/iPnnu1zAxxyBy\n" +
+                        "2VguKv4SWjRFoRkIfIlHX0qVviMhSlNy2ioFLy7JcPZb+v3ftDGywUqcBiVDoea0\n" +
+                        "Hn+GmxZA\n" +
+                        "-----END CERTIFICATE-----";
+
+                KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+                keyStore.load(null);
+
+                CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                keyStore.setCertificateEntry("cert", cf.generateCertificate(new ByteArrayInputStream(cert.getBytes())));
+                Enumeration<String> aliases = keyStore.aliases();
+                while(aliases.hasMoreElements()) {
+                    Log.e(TAG, "alias: " +  aliases.nextElement());
+                }
+
+                String algorithm = TrustManagerFactory.getDefaultAlgorithm();
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
+                tmf.init(keyStore);
+                for(TrustManager trust : tmf.getTrustManagers()) {
+                    Log.e(TAG, "trust:" + trust);
+                }
+                SSLContext context = SSLContext.getInstance("TLS");
+                context.init(null, tmf.getTrustManagers(), null);
+
+                URL url = new URL("https://jfrogedc.gsep.daimler.com/artifactory/HMIEVO_MAVEN-HMI_2_0_Truck_MAVEN_Release");
+                Log.e(TAG, "" + url.getAuthority());
+                HttpsURLConnection urlConnection = (HttpsURLConnection )url.openConnection();
+                urlConnection.setSSLSocketFactory(context.getSocketFactory());
+                //urlConnection.setRequestProperty("KeepAlive", true);
+                InputStream in = urlConnection.getInputStream();
+                while (in.available() > 0) {
+                    byte[] b = new byte[1024];
+                    in.read(b);
+                    Log.e(TAG, ": " + b);
+                }
+            }
+            catch(Exception e) {
+                Log.e(TAG, "e", e);
+            }
+            return null;
+        };
+    };
+    task.execute();
+
+*/
