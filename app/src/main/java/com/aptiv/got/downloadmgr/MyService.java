@@ -8,6 +8,7 @@ import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.DownloadManager;
 import android.app.Service;
+import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -112,10 +113,7 @@ public class MyService extends Service {
         //telephonyService();
         //wifiManager();
         //windowManager();
-
-
     }
-
 
     private void accessibilityManager() {
         AccessibilityManager accessibility = (AccessibilityManager)getSystemService(Context.ACCESSIBILITY_SERVICE);
@@ -177,6 +175,11 @@ public class MyService extends Service {
 
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         adapter.enable();
+
+        Log.e(TAG, "" + BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
+
+        //Log.e(TAG, "" + BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
+        //List<?> profiles = adapter.getSupportedProfiles();
     }
     private void build() {
         Log.e(TAG, "deviceMake=" + Build.MANUFACTURER);
@@ -335,7 +338,14 @@ public class MyService extends Service {
         Log.e(TAG, "text=" + text);
     }
     private void telecomManager() {
-        final TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
+        final TelecomManager telecomManager = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
+
+        // PhoneAccountHandle phoneAccountHandle = new PhoneAccountHandle(new ComponentName(this.getApplicationContext(), MyService.class), "example");
+        //PhoneAccount phoneAccount = PhoneAccount.builder(phoneAccountHandle, "example").setCapabilities(PhoneAccount.CAPABILITY_CALL_PROVIDER).build();
+        //PhoneAccountHandle phoneAccountHandle = telecomManager.getDefaultOutgoingPhoneAccount("ytetet");
+        //Bundle extras = new Bundle();
+        //extras.putParcelable(TelecomManager, uri);
+        //telecom.addNewIncomingCall(phoneAccountHandle, extras);
 
         @SuppressLint("MissingPermission")
         final Iterator<PhoneAccountHandle> phoneAccounts = telecomManager.getCallCapablePhoneAccounts().listIterator();

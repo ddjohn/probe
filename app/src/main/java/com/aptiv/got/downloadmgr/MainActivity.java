@@ -29,20 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestPermissions()) return;
 
-        final TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
-
-        // On, Off, Disabled, Limited (reverse camera, climate)
-
-
-        // PhoneAccountHandle phoneAccountHandle = new PhoneAccountHandle(new ComponentName(this.getApplicationContext(), MyService.class), "example");
-        //PhoneAccount phoneAccount = PhoneAccount.builder(phoneAccountHandle, "example").setCapabilities(PhoneAccount.CAPABILITY_CALL_PROVIDER).build();
-        //PhoneAccountHandle phoneAccountHandle = telecomManager.getDefaultOutgoingPhoneAccount("ytetet");
-        //Bundle extras = new Bundle();
-        //extras.putParcelable(TelecomManager, uri);
-
-        //TelecomManager telecom = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
-        //telecom.addNewIncomingCall(phoneAccountHandle, extras);
-
         mediaBrowser = new MediaBrowser(this,
                 new ComponentName(this, MyMediaService.class),
                 new MediaBrowser.ConnectionCallback() {
@@ -77,9 +63,8 @@ public class MainActivity extends AppCompatActivity {
         String permissions[] = new String[] {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.SYSTEM_ALERT_WINDOW,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
         };
         this.requestPermissions(permissions, 666);
