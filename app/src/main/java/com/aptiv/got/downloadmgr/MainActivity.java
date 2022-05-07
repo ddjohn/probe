@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         Log.e(TAG, "connect to browsing service");
-        mediaBrowser.connect();
+//        mediaBrowser.connect();
     }
 
     private boolean requestPermissions() {
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.SYSTEM_ALERT_WINDOW,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
         };
         this.requestPermissions(permissions, 666);

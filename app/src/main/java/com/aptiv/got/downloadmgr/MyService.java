@@ -11,15 +11,17 @@ import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.car.Car;
 import android.car.VehiclePropertyIds;
+import android.car.drivingstate.CarDrivingStateEvent;
+import android.car.drivingstate.CarDrivingStateManager;
+import android.car.drivingstate.CarUxRestrictions;
+import android.car.drivingstate.CarUxRestrictionsManager;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.property.CarPropertyManager;
 import android.car.navigation.CarNavigationStatusManager;
-import android.companion.AssociationRequest;
 import android.companion.CompanionDeviceManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -40,7 +42,6 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.DropBoxManager;
@@ -58,35 +59,24 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
-import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
 
-import java.io.BufferedReader;
+import com.aptiv.got.downloadmgr.concepts.FlatBuffers;
+import com.aptiv.got.downloadmgr.concepts.RecursiveScan;
+import com.aptiv.got.downloadmgr.concepts.WebServer;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
 
 public class MyService extends Service {
     private static final String TAG = MyService.class.getCanonicalName();
@@ -98,7 +88,7 @@ public class MyService extends Service {
         DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
 
         String url = "https://www.sygic.com/assets/enterprise/img/Sygic_logo.svg";
-        //String url = "file://data/local/tmp/Sygic_logo.svg";
+        //String url = "http://localhost:8080/hello.txt";
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle("Title");
         request.setDescription("Description");
@@ -110,12 +100,49 @@ public class MyService extends Service {
         DownloadManager.Query query = new DownloadManager.Query();
         Cursor cursor = manager.query(query);
         Log.e(TAG, "count=" + cursor.getCount());
+        int columns[] = {
+                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR),
+                cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION),
+                cursor.getColumnIndex(DownloadManager.COLUMN_ID),
+                cursor.getColumnIndex(DownloadManager.COLUMN_LAST_MODIFIED_TIMESTAMP),
+                cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI),
+                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE),
+                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIAPROVIDER_URI),
+                cursor.getColumnIndex(DownloadManager.COLUMN_REASON),
+                cursor.getColumnIndex(DownloadManager.COLUMN_STATUS),
+                cursor.getColumnIndex(DownloadManager.COLUMN_TITLE),
+                cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES),
+                cursor.getColumnIndex(DownloadManager.COLUMN_URI),
+
+        };
+        String s2 = "";
+        for(int c : columns) {
+            s2 += "," + cursor.getColumnName(c);
+        }
+        Log.e(TAG, "name=" + s2);
+
         while (cursor.moveToNext()) {
-            Log.e(TAG, "name=" + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION)) + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)));
+            String s = "";
+            for(int c : columns) {
+                s += "," + cursor.getString(c);
+            }
+            Log.e(TAG, "name=" + s);
         }
         cursor.close();
 
 /*
+        File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/");
+        for(File file : f.listFiles()) {
+            Log.e(TAG, "file=" + file);
+            if(file.isDirectory()) {
+                for (File file2 : f.listFiles()) {
+                    Log.e(TAG, "file=" + file2);
+                }
+            }
+        };
+*/
+/*
+
         Log.e(TAG, "----------------");
 
         File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies");
@@ -123,7 +150,6 @@ public class MyService extends Service {
         Log.e(TAG, "dir=" + f.mkdirs());
         Log.e(TAG, "" + !(f.isDirectory() || f.mkdirs()));
         Log.e(TAG, "----------------");
-
 
         final File file = new File(Uri.parse("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies").getPath());
         Log.e(TAG, "file=" + file);
@@ -143,9 +169,6 @@ public class MyService extends Service {
                 //throw new IOException("Failed to create parent for " + test);
             }
         }
-
-
-
 */
 /*
         try {
@@ -172,17 +195,19 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        test();
+        //test();
 
-        ComponentName componentName = new ComponentName(this, MyReceiver.class);
+        try {
+            new FlatBuffers(this);
+            new RecursiveScan(this, "/data/media/10/Android/data/com.aptiv.got.downloadmgr/files/");
+            new WebServer(this);
+        }
+        catch(Exception e) {
+            Log.e(TAG, "exception", e);
+        }
 
+        //ComponentName componentName = new ComponentName(this, MyReceiver.class);
 
-        //BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        //adapter.enable();
-        //adapter.getSupportedProfiles();
-        //Log.e(TAG, "" + android.bluetooth.BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
-
-        // MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
 
         //TetheringManager tetheringManager; // = this.getSystemService(Context)
@@ -214,15 +239,16 @@ public class MyService extends Service {
         catch (KeyStoreException e) {
             e.printStackTrace();
         }
-
         */
         /*
         //unsigned int deviceScreenScale() const override;
         Log.e(TAG,"deviceScreenScale: " + dm.scaledDensity);
-
         //std::string deviceModelyear() const override;
         */
 
+
+
+        //accessibilityManager();
         //accessibilityManager();
         //accountManager();
         //activityManager();
@@ -230,8 +256,10 @@ public class MyService extends Service {
         //audioManager();
         //bluetoothManager();
         //build();
+        //carDrivingStateManager();
         //carNavigationStatusManager();
         //carPropertyManager();
+        //carUxRestrictionManager();
         //companionDeviceManager();
         //connectivityManager();
         //devicePolicyManager(componentName);
@@ -241,6 +269,7 @@ public class MyService extends Service {
         //keyStore();
         //locale();
         //locationManager();
+        //mediaProjectionManager();
         //mediaSession();
         //packageManager();
         //secureSettings();
@@ -400,6 +429,17 @@ public class MyService extends Service {
         Log.e(TAG, "deviceName=" + Build.MODEL);
         Log.e(TAG, "version=Android " + Build.VERSION.RELEASE);
     }
+    private void carDrivingStateManager() {
+        Car car = Car.createCar(this);
+        CarDrivingStateManager carDrivingStateManager = (CarDrivingStateManager)car.getCarManager(Car.CAR_DRIVING_STATE_SERVICE);
+        carDrivingStateManager.registerListener(carDrivingStateEvent -> {
+            Log.e(TAG, "_event=" + carDrivingStateEvent.eventValue);
+            Log.e(TAG, "_time=" + carDrivingStateEvent.timeStamp);
+            Log.e(TAG, "_content" + carDrivingStateEvent.describeContents());
+            Log.e(TAG, "_string" + carDrivingStateEvent.toString());
+        });
+        Log.e(TAG, "driving state=" + carDrivingStateManager.getCurrentCarDrivingState());
+    }
     private void carNavigationStatusManager() {
         Car car = Car.createCar(this);
         CarNavigationStatusManager carNavigationStatusManager = (CarNavigationStatusManager)car.getCarManager(Car.CAR_NAVIGATION_SERVICE);
@@ -429,6 +469,37 @@ public class MyService extends Service {
                 Log.e(TAG, "erroe=" + i + i1);
             }
         }, VehiclePropertyIds.INFO_MAKE, CarPropertyManager.SENSOR_RATE_UI);
+    }
+    private void carUxRestrictionManager() {
+        Car car = Car.createCar(this);
+        CarUxRestrictionsManager carUxRestrictionsManager = (CarUxRestrictionsManager)car.getCarManager(Car.CAR_UX_RESTRICTION_SERVICE);
+        carUxRestrictionsManager.registerListener(new CarUxRestrictionsManager.OnUxRestrictionsChangedListener() {
+            @Override
+            public void onUxRestrictionsChanged(CarUxRestrictions carUxRestrictions) {
+                Log.e(TAG, "restrictions: " + carUxRestrictions.getActiveRestrictions());
+                Log.e(TAG, "contents: " + carUxRestrictions.describeContents());
+                Log.e(TAG, "time: " + carUxRestrictions.getTimeStamp());
+                Log.e(TAG, "depth: " + carUxRestrictions.getMaxContentDepth());
+                Log.e(TAG, "legth: " + carUxRestrictions.getMaxRestrictedStringLength());
+                Log.e(TAG, "items: " + carUxRestrictions.getMaxCumulativeContentItems());
+                Log.e(TAG, "distoptimize: " + carUxRestrictions.isRequiresDistractionOptimization());
+                Log.e(TAG, "ux: " + carUxRestrictions.toString());
+
+                int active = carUxRestrictions.getActiveRestrictions();
+                Log.e(TAG, "active=" + toBinaryString(active, 4));
+                Log.e(TAG, "pad=" + CarUxRestrictions.UX_RESTRICTIONS_NO_DIALPAD);
+                Log.e(TAG, "filt=" + CarUxRestrictions.UX_RESTRICTIONS_NO_FILTERING);
+                Log.e(TAG, "string=" + CarUxRestrictions.UX_RESTRICTIONS_LIMIT_STRING_LENGTH);
+                Log.e(TAG, "key=" + CarUxRestrictions.UX_RESTRICTIONS_NO_KEYBOARD);
+                Log.e(TAG, "video=" + CarUxRestrictions.UX_RESTRICTIONS_NO_VIDEO);
+                Log.e(TAG, "content=" + CarUxRestrictions.UX_RESTRICTIONS_LIMIT_CONTENT);
+                Log.e(TAG, "setup=" + CarUxRestrictions.UX_RESTRICTIONS_NO_SETUP);
+                Log.e(TAG, "test=" + CarUxRestrictions.UX_RESTRICTIONS_NO_TEXT_MESSAGE);
+                Log.e(TAG, "voice=" + CarUxRestrictions.UX_RESTRICTIONS_NO_VOICE_TRANSCRIPTION);
+            }
+        });
+
+        Log.e(TAG, "current=" + carUxRestrictionsManager.getCurrentCarUxRestrictions());
     }
     private void companionDeviceManager() {
         CompanionDeviceManager companionDeviceManager = (CompanionDeviceManager)getSystemService(Context.COMPANION_DEVICE_SERVICE);
@@ -613,6 +684,9 @@ public class MyService extends Service {
         });
         Log.e("TAG", "location=" + location.getLastKnownLocation(location.getGnssHardwareModelName()));
     }
+    private void mediaProjectionManager() {
+        MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+    }
     private void mediaSession() {
         MediaSessionManager sessionManager = (MediaSessionManager)getSystemService(Context.MEDIA_SESSION_SERVICE);
         List<MediaController> list = sessionManager.getActiveSessions(null);
@@ -676,6 +750,7 @@ public class MyService extends Service {
         Log.e(TAG, "mobileCarrier=" + telephony.getNetworkOperatorName());
     }
     private void updateManager() {
+        /*
         UpdateEngine updateEngine = new UpdateEngine();
         Log.e(TAG, "updateEngine=" + updateEngine);
 
@@ -690,6 +765,7 @@ public class MyService extends Service {
             }
         });
         updateEngine.applyPayload("file:///data/ota_package/payload.bin",0, 22112, getInfo());
+    */
     }
     @SuppressLint("MissingPermission")
     private void wifiManager() {
@@ -717,6 +793,18 @@ public class MyService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    public String toBinaryString(int number, int groupSize) {
+        String binary = Integer.toBinaryString(number);
+
+        StringBuilder result = new StringBuilder(binary);
+        for (int i = 1; i < binary.length(); i++) {
+            if (i % groupSize == 0) {
+                result.insert(binary.length() - i, " ");
+            }
+        }
+        return result.toString();
     }
 }
 
