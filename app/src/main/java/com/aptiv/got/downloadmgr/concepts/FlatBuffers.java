@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import java.nio.ByteBuffer;
+
 public class FlatBuffers {
     private static final String TAG = FlatBuffers.class.getCanonicalName();
 
@@ -18,5 +20,14 @@ public class FlatBuffers {
 
         Log.e(TAG, "builder=" + builder);
         Log.e(TAG, "data=" + builder.dataBuffer());
+
+        ByteBuffer buffer = builder.dataBuffer();
+        for(byte b : buffer.array()) {
+            Log.e(TAG, "b=" + b);
+        }
+
+        FlatBuffers buffers = new FlatBuffers(context);
+
+
     }
 }

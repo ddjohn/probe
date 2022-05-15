@@ -6,6 +6,7 @@ import android.accounts.AuthenticatorDescription;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
@@ -61,6 +62,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 
 import com.aptiv.got.downloadmgr.concepts.FlatBuffers;
+import com.aptiv.got.downloadmgr.concepts.MQTT;
 import com.aptiv.got.downloadmgr.concepts.RecursiveScan;
 import com.aptiv.got.downloadmgr.concepts.WebServer;
 
@@ -199,60 +201,19 @@ public class MyService extends Service {
 
         try {
             new FlatBuffers(this);
-            new RecursiveScan(this, "/data/media/10/Android/data/com.aptiv.got.downloadmgr/files/");
-            new WebServer(this);
+            //new MQTT(this);
+            //new RecursiveScan(this, "/data/media/10/Android/data/com.aptiv.got.downloadmgr/files/");
+            //new WebServer(this);
         }
         catch(Exception e) {
             Log.e(TAG, "exception", e);
         }
 
-        //ComponentName componentName = new ComponentName(this, MyReceiver.class);
-
-
-
-        //TetheringManager tetheringManager; // = this.getSystemService(Context)
-        //tetheringManager.
-        /*
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("New carplay session...").setTitle("Carplay");
-        builder.setPositiveButton("connect", (dialog, id) -> {
-        });
-
-        builder.setNegativeButton("cancel", (dialog, id) -> {
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.show();
-       */
-        /*
-        KeyStore store = getSystemService(Context.KEYGUARD_SERVICE);
-        //store.importKey("root", new byte[] {0, 0, 22});
-        //store.importKey("root", new byte[] {0, 0, 22});
-        //store.importKey("root", new byte[] {0, 0, 22});
-
-        try {
-            Certificate rootCert = store.getCertificate("aauto_root");
-            Certificate clientCert = store.getCertificate("aauto_client");
-            Certificate certCertificate = store.getCertificate("aauto_cert");
-        }
-        catch (KeyStoreException e) {
-            e.printStackTrace();
-        }
-        */
-        /*
-        //unsigned int deviceScreenScale() const override;
-        Log.e(TAG,"deviceScreenScale: " + dm.scaledDensity);
-        //std::string deviceModelyear() const override;
-        */
-
-
-
-        //accessibilityManager();
         //accessibilityManager();
         //accountManager();
         //activityManager();
         //alarmManager();
+        //alertDialog();
         //audioManager();
         //bluetoothManager();
         //build();
@@ -282,8 +243,6 @@ public class MyService extends Service {
         //updateManager();
         //windowManager();
     }
-
-
 
     /*
         static String generateSaveFile(Context context, String url, String hint,
@@ -372,6 +331,19 @@ public class MyService extends Service {
         for(AuthenticatorDescription auth : account.getAuthenticatorTypes()) {
             Log.e(TAG, "auth=" + auth);
         }
+    }
+    private void alertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("New carplay session...").setTitle("Carplay");
+        builder.setPositiveButton("connect", (dialog, id) -> {
+        });
+
+        builder.setNegativeButton("cancel", (dialog, id) -> {
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.show();
     }
     private void activityManager() {
         ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
