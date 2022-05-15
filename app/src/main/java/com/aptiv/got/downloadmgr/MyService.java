@@ -61,6 +61,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 
+import com.aptiv.got.downloadmgr.concepts.EncodeAndMux;
 import com.aptiv.got.downloadmgr.concepts.FlatBuffers;
 import com.aptiv.got.downloadmgr.concepts.MQTT;
 import com.aptiv.got.downloadmgr.concepts.RecursiveScan;
@@ -204,6 +205,8 @@ public class MyService extends Service {
             //new MQTT(this);
             //new RecursiveScan(this, "/data/media/10/Android/data/com.aptiv.got.downloadmgr/files/");
             //new WebServer(this);
+            EncodeAndMux mux = new EncodeAndMux(this.getFilesDir());
+            mux.testEncodeVideoToMp4(); 
         }
         catch(Exception e) {
             Log.e(TAG, "exception", e);
