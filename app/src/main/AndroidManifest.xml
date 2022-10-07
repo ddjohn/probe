@@ -85,6 +85,15 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".MyMediaService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
