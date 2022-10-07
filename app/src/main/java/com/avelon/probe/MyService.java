@@ -46,6 +46,7 @@ import com.avelon.probe.areas.DajoBuild;
 import com.avelon.probe.areas.DajoEnvironment;
 import com.avelon.probe.areas.DajoKeyStore;
 import com.avelon.probe.areas.DajoLocale;
+import com.avelon.probe.areas.DajoSystemProperties;
 import com.avelon.probe.areas.managers.DajoCarNavigationStatusManager;
 import com.avelon.probe.areas.managers.DajoDownloadManager;
 import com.avelon.probe.areas.managers.DajoLocationManager;
@@ -59,16 +60,37 @@ import java.util.List;
 public class MyService extends Service {
     private static final String TAG = MyService.class.getCanonicalName();
 
-    public MyService() {
-    }
-
-    //@RequiresApi(api = Build.VERSION_CODES.R)
-    @SuppressLint({"MissingPermission", "Range"})
     @Override
     public void onCreate() {
         super.onCreate();
 
-       // MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        try {
+            AbstractManager[] managers = {
+                    new DajoBluetoothAdapter(this),
+                    new DajoBuild(this),
+                    //new DajoCarNavigationStatusManager(this),
+                    new DajoDownloadManager(this),
+                    new DajoEnvironment(this),
+                    new DajoKeyStore(this),
+                    //new DajoLocale(this),
+                    new DajoLocationManager(this),
+                    //new DajoSystemProperties(this),
+                    new DajoUpdateManager(this),
+                    new DajoWifiManager(this),
+                    new DajoWindowManager(this),
+            };
+
+            for (AbstractManager manager : managers) {
+                Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
+                manager.orchestrate();
+            }
+        }
+        catch(Exception e) {
+            Log.e(TAG, "exception", e);
+        }
+
+
+        // MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("New carplay session...").setTitle("Carplay");
@@ -89,36 +111,8 @@ public class MyService extends Service {
 
         //std::string deviceModelyear() const override;
         */
-/*
 
-*/
-        Log.e(TAG, "-- START --");
-
-        try {
-            AbstractManager[] managers = {
-                    new DajoBluetoothAdapter(this),
-                    new DajoBuild(this),
-                    new DajoCarNavigationStatusManager(this),
-                    new DajoDownloadManager(this),
-                    new DajoEnvironment(this),
-                    new DajoKeyStore(this),
-                    new DajoLocale(this),
-                    new DajoLocationManager(this),
-                    new DajoUpdateManager(this),
-                    new DajoWifiManager(this),
-                    new DajoWindowManager(this),
-            };
-
-            for (AbstractManager manager : managers) {
-                Log.e(TAG, "---- " + manager.getClass().getSimpleName() + " ----");
-                //manager.orchestrate();
-            }
-        }
-        catch(Exception e) {
-            Log.e(TAG, "exception", e);
-        }
-
-        accessibilityManager();
+//        accessibilityManager();
         //accountManager();
         //activityManager();
         //alarmManager();
@@ -134,7 +128,6 @@ public class MyService extends Service {
         //packageManager();
         //secureSettings();
         //storageManager();
-        //systemProperties();
         //systemSettings();
         //telecomManager();
         //telephonyService();
@@ -371,10 +364,7 @@ public class MyService extends Service {
         //    Log.e(TAG, "volume=" + volume);
         //}
     }
-    private void systemProperties() {
-        //String text = SystemProperties.get("ro.build.user");
-        //Log.e(TAG, "text=" + text);
-    }
+
     private void telecomManager() {
         final TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
 

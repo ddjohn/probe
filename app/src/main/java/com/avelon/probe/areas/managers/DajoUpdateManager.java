@@ -15,7 +15,6 @@ public class DajoUpdateManager extends AbstractManager {
        // manager = new UpdateEngine();
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
         // UpdateEngine updateEngine = new UpdateEngine();

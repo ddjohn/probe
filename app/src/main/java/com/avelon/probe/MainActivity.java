@@ -20,8 +20,8 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Network;
-import android.net.TetheredClient;
-import android.net.TetheringManager;
+//import android.net.TetheredClient;
+//import android.net.TetheringManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +31,7 @@ import android.os.Looper;
 import android.telecom.TelecomManager;
 import android.util.Log;
 import android.view.WindowManager;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.security.KeyStoreException;
@@ -43,53 +44,35 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getCanonicalName();
-    MediaProjectionManager mediaProjectionManager;
 
-//    @RequiresApi(api = Build.VERSION_CODES.S)
-    @SuppressLint("MissingPermission")
+    private MyPermissions permissions;
+
+    //MediaProjectionManager mediaProjectionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.e(TAG, "onCreate()");
-
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-        if (ActivityCompat.checkSelfPermission(this, "android.permission.TETHER_PRIVILEGED"/*Manifest.permission.TETHER_PRIVILEGED*/) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "1Not approved");
-        }
-        else {
-            Log.e(TAG, "1Approved");
-        }
+        // Checking Permissions
+        /*permissions = new MyPermissions(this);
+        permissions.request();
+        if(permissions.check()) {
+            Log.e(TAG, "Missing permission - skipping!");
+            return;
+        }*/
 
-        if (ActivityCompat.checkSelfPermission(this, "android.permission.ACCESS_NETWORK_STATE") != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "2Not approved");
-        }
-        else {
-            Log.e(TAG, "2Approved");
-        }
+        // Concepts
+        MyConcepts concepts = new MyConcepts(this);
+        //concepts.init();
 
-        if (ActivityCompat.checkSelfPermission(this, "android.permission.WRITE_SETTINGS") != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "3Not approved");
-        }
-        else {
-            Log.e(TAG, "3Approved");
-        }
+        // Starting Services
+        startService(new Intent(this, MyService.class));
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "4Not approved");
-        }
-        else {
-            Log.e(TAG, "4Approved");
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "5Not approved");
-        }
-        else {
-            Log.e(TAG, "5Approved");
-        }
-
-        @SuppressLint("WrongConstant") TetheringManager manager = (TetheringManager)this.getSystemService("tethering" /*Context.TETHERING_SERVICE*/);
+        /*
+        @SuppressLint("WrongConstant") TetheringManager manager = (TetheringManager)this.getSystemService("tethering"); //Context.TETHERING_SERVICE);
         manager.registerTetheringEventCallback(Executors.newSingleThreadExecutor(), new TetheringManager.TetheringEventCallback() {
                     @Override
                     public void onTetheringSupported(boolean supported) {
@@ -100,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onUpstreamChanged(Network network) {
                         Log.e(TAG, "onUpstreamChanged(): " + network);
-                        TetheringManager.TetheringEventCallback.super.onUpstreamChanged(network);
+                        TetheringManager.TetheringEventCallback.super.onUppackage:mine ANDstreamChanged(network);
                     }
 
                     @Override
@@ -145,18 +128,10 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         Log.e(TAG, "Tethering=" + manager);
-
+*/
 
         //TetheringEventCallback::onClientsChanged()
-/*
-        try {
-            MutualTlsServer server = new MutualTlsServer(this);
-            MutualTlsClient client = new MutualTlsClient(this);
-        }
-        catch (Exception e) {
-           Log.e(TAG, "exception", e);
-        }
-*/
+
 /*
         MyReceiver receiver = new MyReceiver();
         for(Field field : Intent.class.getDeclaredFields()) {
@@ -167,15 +142,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 */
-        //startService(new Intent(this, MyService.class));
 
         //Log.e(TAG, "Requesting projection");
         // mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         //startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), 666);
 
         //Log.e("MUNGO", "" + BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
-
-        if (requestPermissions()) return;
 
         //adapter.enable();
 
@@ -195,33 +167,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private boolean requestPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e(TAG, "onActivityResult()" + requestCode);
         super.onActivityResult(requestCode, resultCode, data);
 
+        permissions.onActivityResult(requestCode, resultCode, data);
+
+        /*
         Handler handler = new Handler(Looper.getMainLooper());
 
         MediaProjection mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
@@ -235,6 +188,6 @@ public class MainActivity extends AppCompatActivity {
             public void onImageAvailable(ImageReader imageReader) {
                 Log.e(TAG, "onImageAvailable()");
             }
-        }, handler);
+        }, handler);*/
     }
 }

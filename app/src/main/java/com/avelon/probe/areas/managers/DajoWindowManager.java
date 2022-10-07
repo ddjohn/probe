@@ -18,15 +18,14 @@ public class DajoWindowManager extends AbstractManager {
         manager = (WindowManager)ctx.getSystemService(Context.WINDOW_SERVICE);
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
         DisplayMetrics dm = new DisplayMetrics();
-        Log.e(TAG,"deviceScreenSize: " + dm.widthPixels + " x " + dm.heightPixels);
+        Log.i(TAG,"deviceScreenSize: " + dm.widthPixels + " x " + dm.heightPixels);
 
         manager.getDefaultDisplay().getMetrics(dm);
         double x = dm.widthPixels/dm.xdpi;
         double y = dm.heightPixels/dm.ydpi;
-        Log.e(TAG,"deviceScreenSize: " + x + " x " + y);
+        Log.i(TAG,"deviceScreenSize: " + x + " x " + y);
     }
 }

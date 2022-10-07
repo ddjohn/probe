@@ -21,19 +21,19 @@ public class DajoWifiManager extends AbstractManager {
     @Override
     public void orchestrate() throws Exception {
         manager.getScanResults().forEach(scan -> {
-            Log.e(TAG, "scan=" + scan);
+            Log.i(TAG, "scan=" + scan);
         });
 
         manager.getConfiguredNetworks().forEach(network -> {
-            Log.e(TAG, "network=" + network);
+            Log.i(TAG, "network=" + network);
         });
-        Log.e(TAG, "info=" + manager.getConnectionInfo());
-        Log.e(TAG, "dhcp=" + manager.getDhcpInfo());
+        Log.i(TAG, "info=" + manager.getConnectionInfo());
+        Log.i(TAG, "dhcp=" + manager.getDhcpInfo());
 
-        Log.e(TAG, "isWifiEnabled=" + manager.isWifiEnabled());
+        Log.i(TAG, "isWifiEnabled=" + manager.isWifiEnabled());
 
-        Log.e(TAG, "is5GHzBandSupported=" + manager.is5GHzBandSupported());
-        Log.e(TAG, "is6GHzBandSupported=" + manager.is6GHzBandSupported());
+        Log.i(TAG, "is5GHzBandSupported=" + manager.is5GHzBandSupported());
+        Log.i(TAG, "is6GHzBandSupported=" + manager.is6GHzBandSupported());
         //Log.e(TAG, "is60GHzBandSupported=" + manager.is60GHzBandSupported());
         //Log.e(TAG, "is24GHzBandSupported=" + manager.is24GHzBandSupported());
     }

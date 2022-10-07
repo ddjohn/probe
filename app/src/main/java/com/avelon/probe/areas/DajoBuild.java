@@ -12,28 +12,28 @@ public class DajoBuild extends AbstractManager {
         super(ctx, permissions);
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
-        Log.e(TAG, "deviceMake=" + Build.MANUFACTURER);
-        Log.e(TAG, "deviceName=" + Build.DEVICE);
-        Log.e(TAG, "deviceName=" + Build.MODEL);
-        Log.e(TAG, "deviceName=" + Build.BOARD);
-        Log.e(TAG, "deviceName=" + Build.BOOTLOADER);
-        Log.e(TAG, "deviceName=" + Build.BRAND);
-        Log.e(TAG, "deviceName=" + Build.DISPLAY);
-        Log.e(TAG, "deviceName=" + Build.FINGERPRINT);
-        Log.e(TAG, "deviceName=" + Build.HARDWARE);
-        Log.e(TAG, "deviceName=" + Build.HOST);
-        Log.e(TAG, "deviceName=" + Build.ID);
-//        Log.e(TAG, "deviceName=" + Build.ODM_SKU);
-        Log.e(TAG, "deviceName=" + Build.PRODUCT);
-//        Log.e(TAG, "deviceName=" + Build.SKU);
-//        Log.e(TAG, "deviceName=" + Build.SOC_MANUFACTURER);
-//        Log.e(TAG, "deviceName=" + Build.SOC_MODEL);
-        Log.e(TAG, "deviceName=" + Build.TAGS);
-        Log.e(TAG, "deviceName=" + Build.TYPE);
-        Log.e(TAG, "deviceName=" + Build.USER);
-        Log.e(TAG, "version=Android " + Build.VERSION.RELEASE);
+        Log.i(TAG, "deviceMake=" + Build.MANUFACTURER);
+        Log.i(TAG, "deviceName=" + Build.DEVICE);
+        Log.i(TAG, "deviceName=" + Build.MODEL);
+        Log.i(TAG, "deviceName=" + Build.BOARD);
+        Log.i(TAG, "deviceName=" + Build.BOOTLOADER);
+        Log.i(TAG, "deviceName=" + Build.BRAND);
+        Log.i(TAG, "deviceName=" + Build.DISPLAY);
+        Log.i(TAG, "deviceName=" + Build.FINGERPRINT);
+        Log.i(TAG, "deviceName=" + Build.HARDWARE);
+        Log.i(TAG, "deviceName=" + Build.HOST);
+        Log.i(TAG, "deviceName=" + Build.ID);
+        //Log.e(TAG, "deviceName=" + Build.ODM_SKU);
+        Log.i(TAG, "deviceName=" + Build.PRODUCT);
+        //Log.e(TAG, "deviceName=" + Build.SOC_MANUFACTURER);
+        //Log.e(TAG, "deviceName=" + Build.SOC_MODEL);
+        Log.i(TAG, "deviceName=" + Build.TAGS);
+        Log.i(TAG, "deviceName=" + Build.TYPE);
+        Log.i(TAG, "deviceName=" + Build.USER);
+        Log.i(TAG, "version=Android " + Build.VERSION.RELEASE);
+
+        //Log.e(TAG, "serial=" + Build.getSerial());
     }
 }

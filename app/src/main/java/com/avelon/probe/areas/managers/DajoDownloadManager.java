@@ -21,7 +21,6 @@ public class DajoDownloadManager extends AbstractManager {
         manager = (DownloadManager) ctx.getSystemService(Context.DOWNLOAD_SERVICE);
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
         //request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
@@ -44,7 +43,7 @@ public class DajoDownloadManager extends AbstractManager {
 
         DownloadManager.Query query = new DownloadManager.Query();
         Cursor cursor = manager.query(query);
-        Log.e(TAG, "count=" + cursor.getCount());
+        Log.i(TAG, "count=" + cursor.getCount());
         while (cursor.moveToNext()) {
             //Log.e(TAG, "name=" + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION)) + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)));
         }
@@ -71,40 +70,40 @@ public class DajoDownloadManager extends AbstractManager {
         File file = new File("/data/oem_data/", filename);
         request.setDestinationUri(Uri.fromFile(file));
 */
-        Log.e(TAG, "----------------");
+        Log.i(TAG, "----------------");
 
         File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies");
-        Log.e(TAG, "dir=" + f.isDirectory());
-        Log.e(TAG, "dir=" + f.mkdirs());
-        Log.e(TAG, "" + !(f.isDirectory() || f.mkdirs()));
-        Log.e(TAG, "----------------");
+        Log.i(TAG, "dir=" + f.isDirectory());
+        Log.i(TAG, "dir=" + f.mkdirs());
+        Log.i(TAG, "" + !(f.isDirectory() || f.mkdirs()));
+        Log.i(TAG, "----------------");
 
 
         final File file = new File(Uri.parse("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies").getPath());
-        Log.e(TAG, "file=" + file);
+        Log.i(TAG, "file=" + file);
         File parent = file.getParentFile().getAbsoluteFile();
-        Log.e(TAG, "parent=" + parent);
+        Log.i(TAG, "parent=" + parent);
         File[] parentTest = new File[] { parent };
         String name = file.getName();
-        Log.e(TAG, "file=" + name);
+        Log.i(TAG, "file=" + name);
 
         // Ensure target directories are ready
         for (File test : parentTest) {
-            Log.e(TAG, "Scan " + test);
-            Log.e(TAG, "Scan " + test.isDirectory());
-            Log.e(TAG, "Scan " + test.mkdirs());
+            Log.i(TAG, "Scan " + test);
+            Log.i(TAG, "Scan " + test.isDirectory());
+            Log.i(TAG, "Scan " + test.mkdirs());
             if (!(test.isDirectory() || test.mkdirs())) {
-                Log.e(TAG, "Failed to create parent for " + test);
+                Log.i(TAG, "Failed to create parent for " + test);
                 //throw new IOException("Failed to create parent for " + test);
             }
         }
 
         try {
             File testDir = new File(ctx.getExternalFilesDir(null).getAbsolutePath() + File.separator + "maps");
-            Log.e(TAG, "path=" + testDir);
-            Log.e(TAG, "Create directory: " + testDir.mkdirs());
+            Log.i(TAG, "path=" + testDir);
+            Log.i(TAG, "Create directory: " + testDir.mkdirs());
             File testFile = new File(testDir, "testmap.txt");
-            Log.e(TAG, "path=" + testFile);
+            Log.i(TAG, "path=" + testFile);
             FileOutputStream stream = new FileOutputStream(testFile);
             stream.write("hello world".getBytes());
             stream.close();

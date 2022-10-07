@@ -12,15 +12,14 @@ public class DajoEnvironment extends AbstractManager {
         super(ctx, permissions);
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
-        Log.e(TAG, "dir=" + Environment.getExternalStorageDirectory());
-        Log.e(TAG, "dir=" + Environment.getExternalStorageState());
-        Log.e(TAG, "dir=" + Environment.DIRECTORY_DOCUMENTS);
+        Log.i(TAG, "dir=" + Environment.getExternalStorageDirectory());
+        Log.i(TAG, "dir=" + Environment.getExternalStorageState());
+        Log.i(TAG, "dir=" + Environment.DIRECTORY_DOCUMENTS);
         //Log.e(TAG, "dir=" + Environment.getStorageDirectory());
-        Log.e(TAG, "dir=" + Environment.getRootDirectory());
-        Log.e(TAG, "dir=" + Environment.getDownloadCacheDirectory());
-        Log.e(TAG, "dir=" + Environment.getDataDirectory());
+        Log.i(TAG, "dir=" + Environment.getRootDirectory());
+        Log.i(TAG, "dir=" + Environment.getDownloadCacheDirectory());
+        Log.i(TAG, "dir=" + Environment.getDataDirectory());
     }
 }

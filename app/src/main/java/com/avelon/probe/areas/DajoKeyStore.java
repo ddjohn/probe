@@ -32,7 +32,6 @@ public class DajoKeyStore extends AbstractManager {
         keyStore.load(null);
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
         KeyPairGenerator generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
@@ -82,12 +81,12 @@ public class DajoKeyStore extends AbstractManager {
 
                 Enumeration<String> aliases = keyStore.aliases();
                 while(aliases.hasMoreElements()) {
-                    Log.e(TAG, "alias=" + aliases.nextElement());
+                    Log.i(TAG, "alias=" + aliases.nextElement());
                 }
 
-                Log.e(TAG, "root=" + keyStore.getCertificate("root_alias"));
-                Log.e(TAG, "root=" + keyStore.getCertificate("cert_alias"));
-                Log.e(TAG, "root=" + keyStore.getCertificate("client_alias"));
+                Log.i(TAG, "root=" + keyStore.getCertificate("root_alias"));
+                Log.i(TAG, "root=" + keyStore.getCertificate("cert_alias"));
+                Log.i(TAG, "root=" + keyStore.getCertificate("client_alias"));
             }
         }
         catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {

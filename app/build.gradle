@@ -4,10 +4,12 @@ plugins {
 
 android {
     compileSdk 31
-
     packagingOptions {
-        pickFirst 'META-INF/DEPENDENCIES'
+        resources {
+            pickFirsts += ['META-INF/DEPENDENCIES']
+        }
     }
+
 
     defaultConfig {
         applicationId "com.avelon.probe"
@@ -45,22 +47,24 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    namespace 'com.avelon.probe'
 }
 
 dependencies {
+    //compileOnly project(path: ':shadow-classes')
+
     implementation fileTree(dir: 'libs', include: '*.jar')
     implementation fileTree(dir: 'libs', include: '*.aar')
-  //  compileOnly project(path: ':shadow-classes')
 
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-    implementation 'org.apache.httpcomponents:httpmime:4.5.13'
-    implementation 'com.squareup.okhttp3:okhttp-tls:4.10.0'
+    //implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    //implementation 'org.apache.httpcomponents:httpmime:4.5.13'
+    //implementation 'com.squareup.okhttp3:okhttp-tls:4.10.0'
 
     // https://mvnrepository.com/artifact/com.google.flatbuffers/flatbuffers-java
-    implementation 'com.google.flatbuffers:flatbuffers-java:1.9.0'
+    //implementation 'com.google.flatbuffers:flatbuffers-java:1.9.0'
 
     // https://mvnrepository.com/artifact/org.eclipse.paho/mqtt-client
-    implementation 'org.eclipse.paho:mqtt-client:0.4.0'
+    //implementation 'org.eclipse.paho:mqtt-client:0.4.0'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
