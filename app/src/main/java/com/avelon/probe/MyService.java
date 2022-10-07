@@ -1,10 +1,6 @@
 package com.avelon.probe;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AuthenticatorDescription;
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
@@ -21,12 +17,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.media.AudioDeviceInfo;
-import android.media.AudioManager;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
-import android.net.ConnectivityManager;
-import android.net.Network;
 import android.os.Bundle;
 import android.os.DropBoxManager;
 import android.os.IBinder;
@@ -41,13 +33,15 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 
 import com.avelon.probe.areas.AbstractManager;
+import com.avelon.probe.areas.managers.DajoAccountManager;
+import com.avelon.probe.areas.managers.DajoActivityManager;
+import com.avelon.probe.areas.managers.DajoConnectivityManager;
+import com.avelon.probe.areas.managers.DajoAudioManager;
 import com.avelon.probe.areas.DajoBluetoothAdapter;
 import com.avelon.probe.areas.DajoBuild;
 import com.avelon.probe.areas.DajoEnvironment;
 import com.avelon.probe.areas.DajoKeyStore;
-import com.avelon.probe.areas.DajoLocale;
-import com.avelon.probe.areas.DajoSystemProperties;
-import com.avelon.probe.areas.managers.DajoCarNavigationStatusManager;
+import com.avelon.probe.areas.DajoSystemSettings;
 import com.avelon.probe.areas.managers.DajoDownloadManager;
 import com.avelon.probe.areas.managers.DajoLocationManager;
 import com.avelon.probe.areas.managers.DajoUpdateManager;
@@ -66,15 +60,20 @@ public class MyService extends Service {
 
         try {
             AbstractManager[] managers = {
+                    new DajoAccountManager(this),
+                    new DajoActivityManager(this),
+                    new DajoAudioManager(this),
                     new DajoBluetoothAdapter(this),
                     new DajoBuild(this),
                     //new DajoCarNavigationStatusManager(this),
+                    new DajoConnectivityManager(this),
                     new DajoDownloadManager(this),
                     new DajoEnvironment(this),
                     new DajoKeyStore(this),
                     //new DajoLocale(this),
                     new DajoLocationManager(this),
                     //new DajoSystemProperties(this),
+                    new DajoSystemSettings(this),
                     new DajoUpdateManager(this),
                     new DajoWifiManager(this),
                     new DajoWindowManager(this),
@@ -113,22 +112,18 @@ public class MyService extends Service {
         */
 
 //        accessibilityManager();
-        //accountManager();
         //activityManager();
         //alarmManager();
-        //audioManager();
         //bluetoothManager();
         //carNavigationStatusManager();
         //carPropertyManager();
         //companionDeviceManager();
-        //connectivityManager();
         //devicePolicyManager(componentName);
         //dropboxManager();
         //mediaSession();
         //packageManager();
         //secureSettings();
         //storageManager();
-        //systemSettings();
         //telecomManager();
         //telephonyService();
 
@@ -147,12 +142,6 @@ public class MyService extends Service {
         //Log.e(TAG, "failed logins=" + devicePolicyManager.getCurrentFailedPasswordAttempts());
         //devicePolicyManager.
         Log.e(TAG, "isAdmin=" + devicePolicyManager.isAdminActive(componentName));
-    }
-
-    private void systemSettings() {
-        Log.e(TAG, "autotime: " + Settings.System.getString(getContentResolver(), Settings.System.AUTO_TIME));
-        Settings.System.putInt(getContentResolver(), Settings.System.AUTO_TIME, 0);
-        Log.e(TAG, "autotime: " + Settings.System.getString(getContentResolver(), Settings.System.AUTO_TIME));
     }
 
     /*
@@ -234,49 +223,14 @@ public class MyService extends Service {
             Log.e(TAG, "instance=" + instance);
         });*/
     }
-    private void accountManager() {
-        AccountManager account = (AccountManager)getSystemService(Context.ACCOUNT_SERVICE);
-        for(Account a : account.getAccounts()) {
-            Log.e(TAG, "account=" + a);
-        }
-        for(AuthenticatorDescription auth : account.getAuthenticatorTypes()) {
-            Log.e(TAG, "auth=" + auth);
-        }
-    }
+
     private void activityManager() {
-        ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.AppTask task : activityManager.getAppTasks()) {
-            Log.e(TAG, "task=" + task.getTaskInfo());
-        }
-        activityManager.getRecentTasks(10, 0).forEach(task -> {
-            Log.e(TAG, "recent=" + task.baseIntent.getComponent());
-        });
-
-        //Log.e(TAG, "top application: " + activityManager.getRunningAppProcesses().get(0).processName);
-        //Log.e(TAG, "top tasks: " + activityManager.getAppTasks().get(0).getTaskInfo().baseActivity);
-        //Log.e(TAG, "top tasks: " + activityManager.getAppTasks().get(0).getTaskInfo().origActivity);
-
-        //activityManager.getAppTasks().forEach(task -> Log.e(TAG, "task=" + task));
     }
     private void alarmManager() {
         AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Log.e(TAG, "alarm=" + alarm.getNextAlarmClock());
     }
-    @SuppressLint("WrongConstant")
-    private void audioManager() {
-        AudioManager audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        audio.getActivePlaybackConfigurations().forEach(config -> {
-            Log.e(TAG, "playback=" + config);
-        });
 
-        audio.getActiveRecordingConfigurations().forEach(config -> {
-            Log.e(TAG, "recording=" + config);
-        });
-        for(AudioDeviceInfo device : audio.getDevices(AudioManager.GET_DEVICES_ALL)) {
-            Log.e(TAG, "device=" + device.getAddress());
-            Log.e(TAG, "device=" + device.getProductName());
-        }
-    }
     @SuppressLint("MissingPermission")
     private void bluetoothManager() {
         BluetoothManager bluetooth = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
@@ -315,14 +269,6 @@ public class MyService extends Service {
         companionDeviceManager.getAssociations().forEach(phone -> {
             Log.e(TAG, "phone=" + phone);
         });
-    }
-    private void connectivityManager() {
-        ConnectivityManager connectivity = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        Log.e(TAG, "activity=" + connectivity.getActiveNetwork());
-        Log.e(TAG, "proxy=" + connectivity.getDefaultProxy());
-        for(Network network : connectivity.getAllNetworks()) {
-            Log.e(TAG, "network=" + network);
-        }
     }
 
     private void dropboxManager() {

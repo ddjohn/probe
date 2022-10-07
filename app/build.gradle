@@ -61,10 +61,10 @@ dependencies {
     //implementation 'com.squareup.okhttp3:okhttp-tls:4.10.0'
 
     // https://mvnrepository.com/artifact/com.google.flatbuffers/flatbuffers-java
-    //implementation 'com.google.flatbuffers:flatbuffers-java:1.9.0'
+    implementation 'com.google.flatbuffers:flatbuffers-java:1.9.0'
 
     // https://mvnrepository.com/artifact/org.eclipse.paho/mqtt-client
-    //implementation 'org.eclipse.paho:mqtt-client:0.4.0'
+    implementation 'org.eclipse.paho:mqtt-client:0.4.0'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

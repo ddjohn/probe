@@ -1,7 +1,7 @@
 package com.avelon.probe.areas;
 
 import android.content.Context;
-import android.os.SystemProperties;
+//import android.os.SystemProperties;
 import android.util.Log;
 
 public class DajoSystemProperties extends AbstractManager {
@@ -16,6 +16,6 @@ public class DajoSystemProperties extends AbstractManager {
 
     @Override
     public void orchestrate() throws Exception {
-        Log.e(TAG, "" + SystemProperties.get("ro.build.user"));
+       // Log.e(TAG, "" + SystemProperties.get("ro.build.user"));
     }
 }
