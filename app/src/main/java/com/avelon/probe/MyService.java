@@ -15,16 +15,12 @@ import android.companion.CompanionDeviceManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.os.Bundle;
-import android.os.DropBoxManager;
 import android.os.IBinder;
 //import android.os.SystemProperties;
 import android.os.storage.StorageManager;
-import android.provider.Settings;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
@@ -33,6 +29,11 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 
 import com.avelon.probe.areas.AbstractManager;
+import com.avelon.probe.areas.DajoProjectionManager;
+import com.avelon.probe.areas.DajoTelecomManager;
+import com.avelon.probe.areas.managers.DajoDropboxManager;
+import com.avelon.probe.areas.DajoSecureSettings;
+import com.avelon.probe.areas.managers.DajoPackageManager;
 import com.avelon.probe.areas.managers.DajoAccountManager;
 import com.avelon.probe.areas.managers.DajoActivityManager;
 import com.avelon.probe.areas.managers.DajoConnectivityManager;
@@ -63,17 +64,21 @@ public class MyService extends Service {
                     new DajoAccountManager(this),
                     new DajoActivityManager(this),
                     new DajoAudioManager(this),
-                    new DajoBluetoothAdapter(this),
+                    //new DajoBluetoothAdapter(this),
                     new DajoBuild(this),
                     //new DajoCarNavigationStatusManager(this),
                     new DajoConnectivityManager(this),
                     new DajoDownloadManager(this),
+                    new DajoDropboxManager(this),
                     new DajoEnvironment(this),
                     new DajoKeyStore(this),
                     //new DajoLocale(this),
                     new DajoLocationManager(this),
+                    new DajoPackageManager(this),
+                    new DajoSecureSettings(this),
                     //new DajoSystemProperties(this),
                     new DajoSystemSettings(this),
+                    new DajoTelecomManager(this),
                     new DajoUpdateManager(this),
                     new DajoWifiManager(this),
                     new DajoWindowManager(this),
@@ -121,7 +126,6 @@ public class MyService extends Service {
         //devicePolicyManager(componentName);
         //dropboxManager();
         //mediaSession();
-        //packageManager();
         //secureSettings();
         //storageManager();
         //telecomManager();
@@ -224,8 +228,6 @@ public class MyService extends Service {
         });*/
     }
 
-    private void activityManager() {
-    }
     private void alarmManager() {
         AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Log.e(TAG, "alarm=" + alarm.getNextAlarmClock());
@@ -271,15 +273,6 @@ public class MyService extends Service {
         });
     }
 
-    private void dropboxManager() {
-        DropBoxManager dropboxManager = (DropBoxManager)getSystemService(Context.DROPBOX_SERVICE);
-        dropboxManager.addText("author", "david");
-        // /data/system/dropbox
-        Log.e(TAG, "dropbox=" + dropboxManager.getNextEntry("data_app_crash", 1000));
-        DropBoxManager.Entry entry =  dropboxManager.getNextEntry("data_app_crash", 1000);
-        Log.e(TAG, "text=" + entry.getText(100));
-    }
-
     private void mediaSession() {
         MediaSessionManager sessionManager = (MediaSessionManager)getSystemService(Context.MEDIA_SESSION_SERVICE);
         List<MediaController> list = sessionManager.getActiveSessions(null);
@@ -289,20 +282,7 @@ public class MyService extends Service {
             String devicename = (String)b.get("DEVIC_NAME");
         }
     }
-    private void packageManager() {
-        PackageManager packageManager = getPackageManager();
-        List<ApplicationInfo> packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        for(ApplicationInfo info : packages) {
-            Log.e(TAG, "info=" + info);
-            Log.e(TAG, "info=" + packageManager.getLaunchIntentForPackage(info.className));
-        }
-        //packageManager.deletePackage("com.aptiv.got.testfullframework", null, 0);
-        //packageManager.grant(Manifest.permission.ACCESS_COARSE_LOCATION);
-    }
-    private void secureSettings() {
-        String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.e(TAG, "deviceId=" + id);
-    }
+
     private void storageManager() {
         StorageManager storage = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
         Log.e(TAG, "primary=" + storage.getPrimaryStorageVolume());

@@ -15,11 +15,14 @@ public class DajoBluetoothAdapter extends AbstractManager {
         adapter = BluetoothAdapter.getDefaultAdapter();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
         adapter.enable();
         //adapter.getSupportedProfiles();
         //Log.e(TAG, "" + android.bluetooth.BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
         //Log.e("MUNGO", "" + android.bluetooth.BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
+        //Log.e("MUNGO", "" + BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
+
     }
 }

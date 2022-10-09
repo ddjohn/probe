@@ -17,6 +17,7 @@ public class MyPermissions {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.READ_LOGS,
             Manifest.permission.READ_PHONE_STATE,
             //Manifest.permission.SYSTEM_ALERT_WINDOW,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,

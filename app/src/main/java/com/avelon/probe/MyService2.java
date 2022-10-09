@@ -79,9 +79,6 @@ import java.util.TimeZone;
 public class MyService2 extends Service {
     private static final String TAG = MyService2.class.getCanonicalName();
 
-    public MyService2() {
-    }
-
     public void test() {
         DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
 

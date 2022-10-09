@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,8 +18,11 @@ import android.graphics.ImageFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.ImageReader;
+import android.media.browse.MediaBrowser;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.media.session.MediaController;
+import android.media.session.MediaSession;
 import android.net.Network;
 //import android.net.TetheredClient;
 //import android.net.TetheringManager;
@@ -31,6 +35,9 @@ import android.os.Looper;
 import android.telecom.TelecomManager;
 import android.util.Log;
 import android.view.WindowManager;
+
+import com.avelon.probe.areas.DajoProjectionManager;
+import com.avelon.probe.areas.MyMediaService;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -47,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MyPermissions permissions;
 
+    MediaBrowser mediaBrowser = null;
+
     //MediaProjectionManager mediaProjectionManager;
 
     @Override
@@ -56,20 +65,33 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        MediaProjectionManager manager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        startActivityForResult(manager.createScreenCaptureIntent(), 444);
+
+        try {
+            new DajoProjectionManager(this);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Checking Permissions
-        /*permissions = new MyPermissions(this);
+        permissions = new MyPermissions(this);
         permissions.request();
         if(permissions.check()) {
             Log.e(TAG, "Missing permission - skipping!");
             return;
-        }*/
+        }
+
+        // Receivers
+        //MyReceiver receiver = new MyReceiver(this);
 
         // Concepts
         MyConcepts concepts = new MyConcepts(this);
         //concepts.init();
 
         // Starting Services
-        startService(new Intent(this, MyService.class));
+        //startService(new Intent(this, MyService.class));
 
         /*
         @SuppressLint("WrongConstant") TetheringManager manager = (TetheringManager)this.getSystemService("tethering"); //Context.TETHERING_SERVICE);
@@ -132,39 +154,37 @@ public class MainActivity extends AppCompatActivity {
 
         //TetheringEventCallback::onClientsChanged()
 
-/*
-        MyReceiver receiver = new MyReceiver();
-        for(Field field : Intent.class.getDeclaredFields()) {
-            String name = field.getName();
-            if(name.startsWith("ACTION_")) {
-                Log.e(TAG, "Register android.intent.action." + name);
-                registerReceiver(receiver, new IntentFilter("android.intent.action." + name));
-            }
-        }
-*/
 
-        //Log.e(TAG, "Requesting projection");
-        // mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        //startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), 666);
+        mediaBrowser = new MediaBrowser(this,
+                new ComponentName(this, MyMediaService.class),
+                new MediaBrowser.ConnectionCallback() {
+                    @Override
+                    public void onConnected() {
+                        super.onConnected();
 
-        //Log.e("MUNGO", "" + BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
+                        MediaSession.Token token = mediaBrowser.getSessionToken();
+                        Log.e(TAG, "token=" + token);
 
-        //adapter.enable();
-
-        //final TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
-
-        // On, Off, Disabled, Limited (reverse camera, climate)
+                        MediaController mediaController = new MediaController(MainActivity.this, token);
+                        Log.e(TAG, "controller=" + mediaController);
 
 
-        // PhoneAccountHandle phoneAccountHandle = new PhoneAccountHandle(new ComponentName(this.getApplicationContext(), MyService.class), "example");
-        //PhoneAccount phoneAccount = PhoneAccount.builder(phoneAccountHandle, "example").setCapabilities(PhoneAccount.CAPABILITY_CALL_PROVIDER).build();
-        //PhoneAccountHandle phoneAccountHandle = telecomManager.getDefaultOutgoingPhoneAccount("ytetet");
-        //Bundle extras = new Bundle();
-        //extras.putParcelable(TelecomManager, uri);
+                        String root = mediaBrowser.getRoot();
+                        Log.i(TAG, "MediaRoot=" + root);
 
-        //TelecomManager telecom = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
-        //telecom.addNewIncomingCall(phoneAccountHandle, extras);
+                    }
+                },
+                null);
+        Log.e(TAG, "browser=" + mediaBrowser);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.e(TAG, "connect to browsing service");
+//        mediaBrowser.connect();
     }
 
     @Override
@@ -172,7 +192,15 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "onActivityResult()" + requestCode);
         super.onActivityResult(requestCode, resultCode, data);
 
-        permissions.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case MyPermissions.REQUEST_CODE: {
+                permissions.onActivityResult(requestCode, resultCode, data);
+                break;
+            }
+            default: {
+                Log.e(TAG, "Unknown request code: " + requestCode);
+            }
+        }
 
         /*
         Handler handler = new Handler(Looper.getMainLooper());
