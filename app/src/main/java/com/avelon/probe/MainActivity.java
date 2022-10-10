@@ -2,15 +2,15 @@ package com.avelon.probe;
 
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.util.Log;
-import com.avelon.probe.areas.DajoProjectionManager;
+import com.avelon.probe.areas.managers.DajoProjectionManager;
 import com.avelon.probe.areas.MyMediaService;
+import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
 
 public class MainActivity extends MyActivityLifecycle {
     private static final String TAG = MainActivity.class.getCanonicalName();
@@ -38,15 +38,9 @@ public class MainActivity extends MyActivityLifecycle {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Activity")
-                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // START THE GAME!
-                    }
+                .setPositiveButton("Start", (dialog, id) -> {
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
+                .setNegativeButton("Cancel", (dialog, id) -> {
                 });
         AlertDialog dialog = builder.create();
         dialog.show();

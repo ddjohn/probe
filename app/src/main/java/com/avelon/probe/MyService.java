@@ -3,7 +3,6 @@ package com.avelon.probe;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -15,7 +14,6 @@ import android.car.hardware.property.CarPropertyManager;
 import android.companion.CompanionDeviceManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
@@ -32,8 +30,8 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 
 import com.avelon.probe.areas.AbstractManager;
-import com.avelon.probe.areas.DajoProjectionManager;
-import com.avelon.probe.areas.DajoTelecomManager;
+import com.avelon.probe.areas.managers.DajoTelecomManager;
+import com.avelon.probe.areas.lifecycle.MyServiceLifecycle;
 import com.avelon.probe.areas.managers.DajoDropboxManager;
 import com.avelon.probe.areas.DajoSecureSettings;
 import com.avelon.probe.areas.managers.DajoPackageManager;
@@ -41,7 +39,6 @@ import com.avelon.probe.areas.managers.DajoAccountManager;
 import com.avelon.probe.areas.managers.DajoActivityManager;
 import com.avelon.probe.areas.managers.DajoConnectivityManager;
 import com.avelon.probe.areas.managers.DajoAudioManager;
-import com.avelon.probe.areas.DajoBluetoothAdapter;
 import com.avelon.probe.areas.DajoBuild;
 import com.avelon.probe.areas.DajoEnvironment;
 import com.avelon.probe.areas.DajoKeyStore;
@@ -64,24 +61,13 @@ public class MyService extends MyServiceLifecycle {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Service")
-                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
+                .setPositiveButton("Start", (dialog, id) -> {
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
+                .setNegativeButton("Cancel", (dialog, id) -> {
                 });
         AlertDialog dialog = builder.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
-
-        /*dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
-
-                        //WindowManager.LayoutParams.FLAG_ACTIVITY_NEW_TASK|
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
 
         try {
             AbstractManager[] managers = {
@@ -117,21 +103,7 @@ public class MyService extends MyServiceLifecycle {
             Log.e(TAG, "exception", e);
         }
 
-
         // MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        /*
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("New carplay session...").setTitle("Carplay");
-        builder.setPositiveButton("connect", (dialog, id) -> {
-        });
-
-        builder.setNegativeButton("cancel", (dialog, id) -> {
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.show();
-       */
 
         /*
         //unsigned int deviceScreenScale() const override;

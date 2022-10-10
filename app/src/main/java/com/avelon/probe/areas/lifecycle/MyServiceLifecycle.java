@@ -1,4 +1,4 @@
-package com.avelon.probe;
+package com.avelon.probe.areas.lifecycle;
 
 import android.app.Service;
 import android.content.Intent;
