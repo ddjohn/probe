@@ -1,4 +1,4 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.managers;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 public class DajoProjectionManager extends AbstractManager {
     public static final int REQUEST_CODE = 555;

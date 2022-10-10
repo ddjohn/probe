@@ -1,4 +1,4 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.managers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 
 import com.avelon.probe.MyService;
+import com.avelon.probe.areas.AbstractManager;
 
 public class DajoTelecomManager extends AbstractManager {
     private TelecomManager manager;
