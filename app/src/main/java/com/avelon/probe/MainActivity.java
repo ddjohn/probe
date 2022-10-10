@@ -1,58 +1,22 @@
 package com.avelon.probe;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothA2dp;
-import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.graphics.ImageFormat;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.ImageReader;
 import android.media.browse.MediaBrowser;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
-import android.net.Network;
-//import android.net.TetheredClient;
-//import android.net.TetheringManager;
-import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-//import android.os.SystemProperties;
-import android.telecom.TelecomManager;
 import android.util.Log;
-import android.view.WindowManager;
-
 import com.avelon.probe.areas.DajoProjectionManager;
 import com.avelon.probe.areas.MyMediaService;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MyActivityLifecycle {
     private static final String TAG = MainActivity.class.getCanonicalName();
 
     private MyPermissions permissions;
+    private DajoProjectionManager projection;
 
     MediaBrowser mediaBrowser = null;
 
@@ -65,33 +29,45 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        MediaProjectionManager manager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        startActivityForResult(manager.createScreenCaptureIntent(), 444);
-
         try {
-            new DajoProjectionManager(this);
-        }
-        catch (Exception e) {
+            projection = new DajoProjectionManager(this);
+            //projection.init();
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Activity")
+                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // START THE GAME!
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
         // Checking Permissions
         permissions = new MyPermissions(this);
         permissions.request();
-        if(permissions.check()) {
+        if(permissions.check() == false) {
             Log.e(TAG, "Missing permission - skipping!");
             return;
         }
 
         // Receivers
-        //MyReceiver receiver = new MyReceiver(this);
+        MyReceiver receiver = new MyReceiver(this);
 
         // Concepts
         MyConcepts concepts = new MyConcepts(this);
         //concepts.init();
 
         // Starting Services
-        //startService(new Intent(this, MyService.class));
+       startService(new Intent(this, MyService.class));
 
         /*
         @SuppressLint("WrongConstant") TetheringManager manager = (TetheringManager)this.getSystemService("tethering"); //Context.TETHERING_SERVICE);
@@ -189,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e(TAG, "onActivityResult()" + requestCode);
+        Log.e(TAG, "onActivityResult(): " + requestCode);
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode) {
@@ -197,25 +173,13 @@ public class MainActivity extends AppCompatActivity {
                 permissions.onActivityResult(requestCode, resultCode, data);
                 break;
             }
+            case DajoProjectionManager.REQUEST_CODE: {
+                projection.onActivityResult(requestCode, resultCode, data);
+                break;
+            }
             default: {
                 Log.e(TAG, "Unknown request code: " + requestCode);
             }
         }
-
-        /*
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        MediaProjection mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
-        ImageReader imageReader = ImageReader.newInstance(640, 400, ImageFormat.JPEG, 2);
-        mediaProjection.createVirtualDisplay("screencap", 640, 360, getResources().getDisplayMetrics().densityDpi,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY,
-                imageReader.getSurface(), new VirtualDisplay.Callback() {
-                }, handler);
-        imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-            @Override
-            public void onImageAvailable(ImageReader imageReader) {
-                Log.e(TAG, "onImageAvailable()");
-            }
-        }, handler);*/
     }
 }

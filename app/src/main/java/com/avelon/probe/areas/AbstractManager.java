@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-
 public abstract class AbstractManager {
     protected final Context ctx;
     protected final static String TAG = AbstractManager.class.getCanonicalName();
@@ -20,7 +18,7 @@ public abstract class AbstractManager {
 
     protected boolean neededPermissions(String[] permissions) {
         for(String permission : permissions) {
-            if (ActivityCompat.checkSelfPermission(ctx, permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ctx.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 Log.e(TAG, "Not approved permission: " + permission);
                 return false;
             }

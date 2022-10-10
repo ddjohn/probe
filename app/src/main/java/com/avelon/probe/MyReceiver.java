@@ -17,7 +17,7 @@ public class MyReceiver extends BroadcastReceiver {
         for(Field field : Intent.class.getDeclaredFields()) {
             String name = field.getName();
             if(name.startsWith("ACTION_")) {
-                Log.e(TAG, "Register android.intent.action." + name);
+                Log.i(TAG, "Register android.intent.action." + name);
                 ctx.registerReceiver(this, new IntentFilter("android.intent.action." + name));
             }
         }

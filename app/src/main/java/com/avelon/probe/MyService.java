@@ -2,6 +2,7 @@ package com.avelon.probe;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
@@ -14,6 +15,7 @@ import android.car.hardware.property.CarPropertyManager;
 import android.companion.CompanionDeviceManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
@@ -26,6 +28,7 @@ import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 
 import com.avelon.probe.areas.AbstractManager;
@@ -52,12 +55,33 @@ import com.avelon.probe.areas.managers.DajoWindowManager;
 import java.util.Iterator;
 import java.util.List;
 
-public class MyService extends Service {
+public class MyService extends MyServiceLifecycle {
     private static final String TAG = MyService.class.getCanonicalName();
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Service")
+                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.show();
+
+        /*dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
+
+                        //WindowManager.LayoutParams.FLAG_ACTIVITY_NEW_TASK|
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
 
         try {
             AbstractManager[] managers = {

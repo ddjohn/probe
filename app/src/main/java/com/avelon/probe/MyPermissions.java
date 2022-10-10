@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-
 public class MyPermissions {
     private static final String TAG = MyPermissions.class.getSimpleName();
     public static final int REQUEST_CODE = 666;
@@ -17,9 +15,10 @@ public class MyPermissions {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.FOREGROUND_SERVICE,
             Manifest.permission.READ_LOGS,
             Manifest.permission.READ_PHONE_STATE,
-            //Manifest.permission.SYSTEM_ALERT_WINDOW,
+            Manifest.permission.SYSTEM_ALERT_WINDOW,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             //Manifest.permission.WRITE_SETTINGS,
     };
