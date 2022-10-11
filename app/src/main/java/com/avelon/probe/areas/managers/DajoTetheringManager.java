@@ -1,4 +1,4 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.managers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.net.Network;
 import android.net.TetheredClient;
 import android.net.TetheringManager;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 import java.util.Collection;
 import java.util.List;

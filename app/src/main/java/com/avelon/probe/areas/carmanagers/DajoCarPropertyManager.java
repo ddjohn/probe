@@ -1,4 +1,4 @@
-package com.avelon.probe.areas.managers;
+package com.avelon.probe.areas.carmanagers;
 
 import android.annotation.SuppressLint;
 import android.car.Car;

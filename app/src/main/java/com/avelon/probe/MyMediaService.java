@@ -1,4 +1,4 @@
-package com.avelon.probe.areas;
+package com.avelon.probe;
 
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;

@@ -43,9 +43,34 @@ public class DajoDownloadManager extends AbstractManager {
 
         DownloadManager.Query query = new DownloadManager.Query();
         Cursor cursor = manager.query(query);
-        Log.i(TAG, "count=" + cursor.getCount());
+        Log.e(TAG, "count=" + cursor.getCount());
+        int columns[] = {
+                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR),
+                cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION),
+                cursor.getColumnIndex(DownloadManager.COLUMN_ID),
+                cursor.getColumnIndex(DownloadManager.COLUMN_LAST_MODIFIED_TIMESTAMP),
+                cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI),
+                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE),
+                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIAPROVIDER_URI),
+                cursor.getColumnIndex(DownloadManager.COLUMN_REASON),
+                cursor.getColumnIndex(DownloadManager.COLUMN_STATUS),
+                cursor.getColumnIndex(DownloadManager.COLUMN_TITLE),
+                cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES),
+                cursor.getColumnIndex(DownloadManager.COLUMN_URI),
+
+        };
+        String s2 = "";
+        for(int c : columns) {
+            s2 += "," + cursor.getColumnName(c);
+        }
+        Log.e(TAG, "name=" + s2);
+
         while (cursor.moveToNext()) {
-            //Log.e(TAG, "name=" + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION)) + cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)));
+            String s = "";
+            for(int c : columns) {
+                s += "," + cursor.getString(c);
+            }
+            Log.e(TAG, "name=" + s);
         }
         cursor.close();
 
@@ -69,9 +94,64 @@ public class DajoDownloadManager extends AbstractManager {
         Log.e(TAG, "aaa=" + f.exists());
         File file = new File("/data/oem_data/", filename);
         request.setDestinationUri(Uri.fromFile(file));
-*/
-        Log.i(TAG, "----------------");
 
+
+*/
+
+        File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/");
+        for(File file : f.listFiles()) {
+            Log.e(TAG, "file=" + file);
+            if(file.isDirectory()) {
+                for (File file2 : f.listFiles()) {
+                    Log.e(TAG, "file=" + file2);
+                }
+            }
+        };
+
+        Log.e(TAG, "----------------");
+/*
+        File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies");
+        Log.e(TAG, "dir=" + f.isDirectory());
+        Log.e(TAG, "dir=" + f.mkdirs());
+        Log.e(TAG, "" + !(f.isDirectory() || f.mkdirs()));
+        Log.e(TAG, "----------------");
+
+        final File file = new File(Uri.parse("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies").getPath());
+        Log.e(TAG, "file=" + file);
+        File parent = file.getParentFile().getAbsoluteFile();
+        Log.e(TAG, "parent=" + parent);
+        File[] parentTest = new File[] { parent };
+        String name = file.getName();
+        Log.e(TAG, "file=" + name);
+
+        // Ensure target directories are ready
+        for (File test : parentTest) {
+            Log.e(TAG, "Scan " + test);
+            Log.e(TAG, "Scan " + test.isDirectory());
+            Log.e(TAG, "Scan " + test.mkdirs());
+            if (!(test.isDirectory() || test.mkdirs())) {
+                Log.e(TAG, "Failed to create parent for " + test);
+                //throw new IOException("Failed to create parent for " + test);
+            }
+        }
+        */
+
+        /*
+        try {
+            File testDir = new File(this.getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + "maps");
+            Log.e(TAG, "path=" + testDir);
+            Log.e(TAG, "Create directory: " + testDir.mkdirs());
+            File testFile = new File(testDir, "testmap.txt");
+            Log.e(TAG, "path=" + testFile);
+            FileOutputStream stream = new FileOutputStream(testFile);
+            stream.write("hello world".getBytes());
+            stream.close();
+        }
+        catch(Exception e) {
+            Log.e(TAG, "exception", e);
+        }*/
+        Log.i(TAG, "----------------");
+/*
         File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies");
         Log.i(TAG, "dir=" + f.isDirectory());
         Log.i(TAG, "dir=" + f.mkdirs());
@@ -97,7 +177,7 @@ public class DajoDownloadManager extends AbstractManager {
                 //throw new IOException("Failed to create parent for " + test);
             }
         }
-
+*/
         try {
             File testDir = new File(ctx.getExternalFilesDir(null).getAbsolutePath() + File.separator + "maps");
             Log.i(TAG, "path=" + testDir);

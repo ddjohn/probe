@@ -37,7 +37,7 @@ public class DajoProjectionManager extends AbstractManager {
         Log.e(TAG, "onActivityResult()");
 
         Handler handler = new Handler(Looper.getMainLooper());
-
+/*
         MediaProjection mediaProjection = manager.getMediaProjection(resultCode, data);
         ImageReader imageReader = ImageReader.newInstance(640, 400, ImageFormat.JPEG, 2);
         mediaProjection.createVirtualDisplay("screencap", 640, 360, ctx.getResources().getDisplayMetrics().densityDpi,
@@ -51,5 +51,6 @@ public class DajoProjectionManager extends AbstractManager {
                 Log.e(TAG, "onImageAvailable()");
             }
         }, handler);
+        */
     }
 }

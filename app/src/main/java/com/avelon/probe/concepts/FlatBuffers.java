@@ -25,9 +25,5 @@ public class FlatBuffers {
         for(byte b : buffer.array()) {
             Log.e(TAG, "b=" + b);
         }
-
-        FlatBuffers buffers = new FlatBuffers(context);
-
-
     }
 }

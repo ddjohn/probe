@@ -10,7 +10,6 @@ import android.util.Log;
 import com.avelon.probe.areas.AbstractManager;
 import com.avelon.probe.areas.DajoAlertDialog;
 import com.avelon.probe.areas.managers.DajoProjectionManager;
-import com.avelon.probe.areas.MyMediaService;
 import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
 
 public class MainActivity extends MyActivityLifecycle {
@@ -21,11 +20,8 @@ public class MainActivity extends MyActivityLifecycle {
 
     MediaBrowser mediaBrowser = null;
 
-    //MediaProjectionManager mediaProjectionManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.e(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -38,32 +34,8 @@ public class MainActivity extends MyActivityLifecycle {
             return;
         }
 
-        try {
-            AbstractManager[] managers = {
-                    new DajoAlertDialog(this),
-                    projection = new DajoProjectionManager(this),
-            };
-            for (AbstractManager manager : managers) {
-                Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
-                manager.orchestrate();
-            }
-        }
-        catch(Exception e) {
-            Log.e(TAG, "exception", e);
-        }
-
-        // Receivers
-        MyReceiver receiver = new MyReceiver(this);
-
-        // Concepts
-        MyConcepts concepts = new MyConcepts(this);
-        //concepts.init();
-
         // Starting Services
        startService(new Intent(this, MyService.class));
-
-
-
 
         mediaBrowser = new MediaBrowser(this,
                 new ComponentName(this, MyMediaService.class),
@@ -92,6 +64,27 @@ public class MainActivity extends MyActivityLifecycle {
     @Override
     public void onStart() {
         super.onStart();
+
+        try {
+            AbstractManager[] managers = {
+                    new DajoAlertDialog(this),
+                    projection = new DajoProjectionManager(this),
+            };
+            for (AbstractManager manager : managers) {
+                Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
+                manager.orchestrate();
+            }
+        }
+        catch(Exception e) {
+            Log.e(TAG, "exception", e);
+        }
+
+        // Receivers
+        MyReceiver receiver = new MyReceiver(this);
+
+        // Concepts
+        MyConcepts concepts = new MyConcepts(this);
+        concepts.init();
 
         Log.e(TAG, "connect to browsing service");
 //        mediaBrowser.connect();
