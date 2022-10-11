@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import com.avelon.probe.areas.AbstractManager;
 import com.avelon.probe.areas.DajoAlertDialog;
+import com.avelon.probe.areas.DajoTextToSpeech;
 import com.avelon.probe.areas.managers.DajoProjectionManager;
 import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
 
@@ -17,6 +18,7 @@ public class MainActivity extends MyActivityLifecycle {
 
     private MyPermissions permissions;
     private DajoProjectionManager projection;
+    private DajoTextToSpeech tts;
 
     MediaBrowser mediaBrowser = null;
 
@@ -68,6 +70,7 @@ public class MainActivity extends MyActivityLifecycle {
         try {
             AbstractManager[] managers = {
                     new DajoAlertDialog(this),
+                    tts = new DajoTextToSpeech(this),
                     projection = new DajoProjectionManager(this),
             };
             for (AbstractManager manager : managers) {
@@ -103,6 +106,10 @@ public class MainActivity extends MyActivityLifecycle {
             }
             case DajoProjectionManager.REQUEST_CODE: {
                 projection.onActivityResult(requestCode, resultCode, data);
+                break;
+            }
+            case DajoTextToSpeech.REQUEST_CODE: {
+                tts.onActivityResult(requestCode, resultCode, data);
                 break;
             }
             default: {

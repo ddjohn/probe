@@ -23,7 +23,7 @@ public class MyConcepts {
             MutualTlsServer server = new MutualTlsServer(ctx);
             MutualTlsClient client = new MutualTlsClient(ctx);
 
-            new MQTT(ctx);
+            // MQTT(ctx);
             new RecursiveScan(ctx, "/data/media/10/Android/data/com.aptiv.got.downloadmgr/files/");
             new WebServer(ctx);
             EncodeAndMux mux = new EncodeAndMux(ctx.getFilesDir());
