@@ -1,6 +1,5 @@
 package com.avelon.probe;
 
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.media.browse.MediaBrowser;
@@ -8,6 +7,8 @@ import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.util.Log;
+import com.avelon.probe.areas.AbstractManager;
+import com.avelon.probe.areas.DajoAlertDialog;
 import com.avelon.probe.areas.managers.DajoProjectionManager;
 import com.avelon.probe.areas.MyMediaService;
 import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
@@ -29,28 +30,26 @@ public class MainActivity extends MyActivityLifecycle {
 
         setContentView(R.layout.activity_main);
 
-        try {
-            projection = new DajoProjectionManager(this);
-            //projection.init();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Activity")
-                .setPositiveButton("Start", (dialog, id) -> {
-                })
-                .setNegativeButton("Cancel", (dialog, id) -> {
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
         // Checking Permissions
         permissions = new MyPermissions(this);
         permissions.request();
         if(permissions.check() == false) {
             Log.e(TAG, "Missing permission - skipping!");
             return;
+        }
+
+        try {
+            AbstractManager[] managers = {
+                    new DajoAlertDialog(this),
+                    projection = new DajoProjectionManager(this),
+            };
+            for (AbstractManager manager : managers) {
+                Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
+                manager.orchestrate();
+            }
+        }
+        catch(Exception e) {
+            Log.e(TAG, "exception", e);
         }
 
         // Receivers
@@ -63,66 +62,7 @@ public class MainActivity extends MyActivityLifecycle {
         // Starting Services
        startService(new Intent(this, MyService.class));
 
-        /*
-        @SuppressLint("WrongConstant") TetheringManager manager = (TetheringManager)this.getSystemService("tethering"); //Context.TETHERING_SERVICE);
-        manager.registerTetheringEventCallback(Executors.newSingleThreadExecutor(), new TetheringManager.TetheringEventCallback() {
-                    @Override
-                    public void onTetheringSupported(boolean supported) {
-                        Log.e(TAG, "onTetheringSupported(): " + supported);
-                        TetheringManager.TetheringEventCallback.super.onTetheringSupported(supported);
-                    }
 
-                    @Override
-                    public void onUpstreamChanged(Network network) {
-                        Log.e(TAG, "onUpstreamChanged(): " + network);
-                        TetheringManager.TetheringEventCallback.super.onUppackage:mine ANDstreamChanged(network);
-                    }
-
-                    @Override
-                    public void onTetherableInterfaceRegexpsChanged(TetheringManager.TetheringInterfaceRegexps reg) {
-                        Log.e(TAG, "onTetherableInterfaceRegexpsChanged(): " + reg);
-                        TetheringManager.TetheringEventCallback.super.onTetherableInterfaceRegexpsChanged(reg);
-                    }
-
-                    @Override
-                    public void onTetherableInterfacesChanged(List<String> interfaces) {
-                        Log.e(TAG, "onTetherableInterfacesChanged(): " + interfaces);
-                        TetheringManager.TetheringEventCallback.super.onTetherableInterfacesChanged(interfaces);
-                    }
-
-                    @Override
-                    public void onTetheredInterfacesChanged(List<String> interfaces) {
-                        Log.e(TAG, "onTetheredInterfacesChanged(): " + interfaces);
-                        TetheringManager.TetheringEventCallback.super.onTetheredInterfacesChanged(interfaces);
-                    }
-
-                    @Override
-                    public void onError(String ifName, int error) {
-                        Log.e(TAG, "onError(): " + ifName + error);
-                        TetheringManager.TetheringEventCallback.super.onError(ifName, error);
-                    }
-
-                    @Override
-                    public void onClientsChanged(Collection<TetheredClient> clients) {
-                        Log.e(TAG, "onClientsChanged(): " + clients);
-                        TetheringManager.TetheringEventCallback.super.onClientsChanged(clients);
-
-                        clients.forEach(client -> {
-                            Log.e(TAG, "client=" + client);
-                        });
-                    }
-
-                    @Override
-                    public void onOffloadStatusChanged(int status) {
-                        Log.e(TAG, "onOffloadStatusChanged(): " + status);
-                        TetheringManager.TetheringEventCallback.super.onOffloadStatusChanged(status);
-                    }
-                }
-        );
-        Log.e(TAG, "Tethering=" + manager);
-*/
-
-        //TetheringEventCallback::onClientsChanged()
 
 
         mediaBrowser = new MediaBrowser(this,
@@ -155,6 +95,7 @@ public class MainActivity extends MyActivityLifecycle {
 
         Log.e(TAG, "connect to browsing service");
 //        mediaBrowser.connect();
+
     }
 
     @Override

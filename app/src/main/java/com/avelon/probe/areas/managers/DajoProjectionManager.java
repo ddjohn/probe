@@ -52,10 +52,4 @@ public class DajoProjectionManager extends AbstractManager {
             }
         }, handler);
     }
-
-    public void init() {
-        ((Activity)ctx).startActivityForResult(manager.createScreenCaptureIntent(), REQUEST_CODE);
-
-
-    }
 }

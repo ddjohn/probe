@@ -184,59 +184,16 @@ public class MyService2 extends Service {
 
     }
 
-    //@RequiresApi(api = Build.VERSION_CODES.R)
     @SuppressLint({"MissingPermission", "Range"})
     @Override
     public void onCreate() {
         super.onCreate();
 
-        //test();
-
-        try {
-            new FlatBuffers(this);
-            //new MQTT(this);
-            //new RecursiveScan(this, "/data/media/10/Android/data/com.aptiv.got.downloadmgr/files/");
-            //new WebServer(this);
-            EncodeAndMux mux = new EncodeAndMux(this.getFilesDir());
-            mux.testEncodeVideoToMp4(); 
-        }
-        catch(Exception e) {
-            Log.e(TAG, "exception", e);
-        }
-
-        //accessibilityManager();
-        //accountManager();
-        //activityManager();
-        //alarmManager();
-        //alertDialog();
-        //audioManager();
-        //bluetoothManager();
-        //build();
-        //carDrivingStateManager();
-        //carNavigationStatusManager();
-        //carPropertyManager();
-        //carUxRestrictionManager();
-        //companionDeviceManager();
-        //connectivityManager();
-        //devicePolicyManager(componentName);
-        //downloadManager();
-        //dropboxManager();
-        //environment();
-        //keyStore();
-        //locale();
-        //locationManager();
-        //mediaProjectionManager();
-        //mediaSession();
-        //packageManager();
-        //secureSettings();
-        //storageManager();
-        //systemProperties();
-        //systemSettings();
-        //telecomManager();
-        //telephonyService();
-        //wifiManager();
-        //updateManager();
-        //windowManager();
+//new MQTT(this);
+        //new RecursiveScan(this, "/data/media/10/Android/data/com.aptiv.got.downloadmgr/files/");
+        //new WebServer(this);
+        EncodeAndMux mux = new EncodeAndMux(this.getFilesDir());
+        mux.testEncodeVideoToMp4();
     }
 
     /*
@@ -309,93 +266,7 @@ public class MyService2 extends Service {
             }
         }
     */
-    private void accessibilityManager() {
-        AccessibilityManager accessibility = (AccessibilityManager)getSystemService(Context.ACCESSIBILITY_SERVICE);
-        /*accessibility.getEnabledAccessibilityServiceList(AccessibilityManager.FLAG_CONTENT_TEXT).forEach(service -> {
-            Log.e(TAG, "service=" + service);
-        });
-        accessibility.getInstalledAccessibilityServiceList().forEach(instance -> {
-            Log.e(TAG, "instance=" + instance);
-        });*/
-    }
-    private void accountManager() {
-        AccountManager account = (AccountManager)getSystemService(Context.ACCOUNT_SERVICE);
-        for(Account a : account.getAccounts()) {
-            Log.e(TAG, "account=" + a);
-        }
-        for(AuthenticatorDescription auth : account.getAuthenticatorTypes()) {
-            Log.e(TAG, "auth=" + auth);
-        }
-    }
-    private void alertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("New carplay session...").setTitle("Carplay");
-        builder.setPositiveButton("connect", (dialog, id) -> {
-        });
 
-        builder.setNegativeButton("cancel", (dialog, id) -> {
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.show();
-    }
-    private void activityManager() {
-        ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.AppTask task : activityManager.getAppTasks()) {
-            Log.e(TAG, "task=" + task.getTaskInfo());
-        }
-        activityManager.getRecentTasks(10, 0).forEach(task -> {
-            Log.e(TAG, "recent=" + task.baseIntent.getComponent());
-        });
-
-        //Log.e(TAG, "top application: " + activityManager.getRunningAppProcesses().get(0).processName);
-        //Log.e(TAG, "top tasks: " + activityManager.getAppTasks().get(0).getTaskInfo().baseActivity);
-        //Log.e(TAG, "top tasks: " + activityManager.getAppTasks().get(0).getTaskInfo().origActivity);
-
-        //activityManager.getAppTasks().forEach(task -> Log.e(TAG, "task=" + task));
-    }
-    private void alarmManager() {
-        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Log.e(TAG, "alarm=" + alarm.getNextAlarmClock());
-    }
-    @SuppressLint("WrongConstant")
-    private void audioManager() {
-        AudioManager audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        audio.getActivePlaybackConfigurations().forEach(config -> {
-            Log.e(TAG, "playback=" + config);
-        });
-
-        audio.getActiveRecordingConfigurations().forEach(config -> {
-            Log.e(TAG, "recording=" + config);
-        });
-        for(AudioDeviceInfo device : audio.getDevices(AudioManager.GET_DEVICES_ALL)) {
-            Log.e(TAG, "device=" + device.getAddress());
-            Log.e(TAG, "device=" + device.getProductName());
-        }
-    }
-    @SuppressLint("MissingPermission")
-    private void bluetoothManager() {
-        BluetoothManager bluetooth = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
-        Log.e(TAG, "adapter=" + bluetooth.getAdapter());
-        Log.e(TAG, "adapter=" + bluetooth.getConnectedDevices(BluetoothProfile.GATT));
-
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        adapter.enable();
-
-        Log.e(TAG, "" + BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
-
-        //Log.e(TAG, "" + BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
-        //List<?> profiles = adapter.getSupportedProfiles();
-
-        //adapter.getSupportedProfiles();
-    }
-    private void build() {
-        Log.e(TAG, "deviceMake=" + Build.MANUFACTURER);
-        Log.e(TAG, "deviceName=" + Build.DEVICE);
-        Log.e(TAG, "deviceName=" + Build.MODEL);
-        Log.e(TAG, "version=Android " + Build.VERSION.RELEASE);
-    }
     private void carDrivingStateManager() {
         Car car = Car.createCar(this);
         CarDrivingStateManager carDrivingStateManager = (CarDrivingStateManager)car.getCarManager(Car.CAR_DRIVING_STATE_SERVICE);
@@ -415,28 +286,7 @@ public class MyService2 extends Service {
         carNavigationStatusManager.sendNavigationStateChange(bundle);
         // NavigationStateProto proto;
     }
-    private void carPropertyManager() {
-        Car car = Car.createCar(this);
-        CarPropertyManager propertyManager = (CarPropertyManager)car.getCarManager(Car.PROPERTY_SERVICE);
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.INFO_MAKE, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.NIGHT_MODE, 0));
-        //Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.PERF_VEHICLE_SPEED, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
-        propertyManager.getPropertyList().forEach(property -> Log.e(TAG, "property=" + property));
-        propertyManager.registerCallback(new CarPropertyManager.CarPropertyEventCallback() {
-            @Override
-            public void onChangeEvent(CarPropertyValue carPropertyValue) {
-                Log.e(TAG, "286261505=" + carPropertyValue);
-            }
 
-            @Override
-            public void onErrorEvent(int i, int i1) {
-                Log.e(TAG, "erroe=" + i + i1);
-            }
-        }, VehiclePropertyIds.INFO_MAKE, CarPropertyManager.SENSOR_RATE_UI);
-    }
     private void carUxRestrictionManager() {
         Car car = Car.createCar(this);
         CarUxRestrictionsManager carUxRestrictionsManager = (CarUxRestrictionsManager)car.getCarManager(Car.CAR_UX_RESTRICTION_SERVICE);
@@ -468,33 +318,7 @@ public class MyService2 extends Service {
 
         Log.e(TAG, "current=" + carUxRestrictionsManager.getCurrentCarUxRestrictions());
     }
-    private void companionDeviceManager() {
-        CompanionDeviceManager companionDeviceManager = (CompanionDeviceManager)getSystemService(Context.COMPANION_DEVICE_SERVICE);
-        companionDeviceManager.getAssociations().forEach(phone -> {
-            Log.e(TAG, "phone=" + phone);
-        });
-    }
-    private void connectivityManager() {
-        ConnectivityManager connectivity = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        Log.e(TAG, "activity=" + connectivity.getActiveNetwork());
-        Log.e(TAG, "proxy=" + connectivity.getDefaultProxy());
-        for(Network network : connectivity.getAllNetworks()) {
-            Log.e(TAG, "network=" + network);
-        }
-    }
-    private void devicePolicyManager(ComponentName componentName) {
-        DevicePolicyManager devicePolicyManager = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
-        Log.e(TAG, "Admins:");
-        for(ComponentName name : devicePolicyManager.getActiveAdmins()) {
-            Log.e(TAG, "name=" + name);
-        }
-        devicePolicyManager.lockNow();
-        //devicePolicyManager.setOrganizationId("Aptiv");
-        //devicePolicyManager.setOrganizationName("", "Aptiv");
-        //Log.e(TAG, "failed logins=" + devicePolicyManager.getCurrentFailedPasswordAttempts());
-        //devicePolicyManager.
-        Log.e(TAG, "isAdmin=" + devicePolicyManager.isAdminActive(componentName));
-    }
+
     private void downloadManager() {
         //request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
         //request.setAllowedOverRoaming(false);
@@ -546,23 +370,7 @@ public class MyService2 extends Service {
         request.setDestinationUri(Uri.fromFile(file));
 */
     }
-    private void dropboxManager() {
-        DropBoxManager dropboxManager = (DropBoxManager)getSystemService(Context.DROPBOX_SERVICE);
-        dropboxManager.addText("author", "david");
-        // /data/system/dropbox
-        Log.e(TAG, "dropbox=" + dropboxManager.getNextEntry("data_app_crash", 1000));
-        DropBoxManager.Entry entry =  dropboxManager.getNextEntry("data_app_crash", 1000);
-        Log.e(TAG, "text=" + entry.getText(100));
-    }
-    private void environment() {
-        Log.e(TAG, "dir=" + Environment.getExternalStorageDirectory());
-        Log.e(TAG, "dir=" + Environment.getExternalStorageState());
-        Log.e(TAG, "dir=" + Environment.DIRECTORY_DOCUMENTS);
-        //Log.e(TAG, "dir=" + Environment.getStorageDirectory());
-        Log.e(TAG, "dir=" + Environment.getRootDirectory());
-        Log.e(TAG, "dir=" + Environment.getDownloadCacheDirectory());
-        Log.e(TAG, "dir=" + Environment.getDataDirectory());
-    }
+
     private void keyStore() {
         String cert = "-----BEGIN CERTIFICATE-----\n" +
                 "MIICEjCCAXsCAg36MA0GCSqGSIb3DQEBBQUAMIGbMQswCQYDVQQGEwJKUDEOMAwG\n" +
@@ -614,46 +422,7 @@ public class MyService2 extends Service {
             e.printStackTrace();
         }
     }
-    private void locale() {
-        Log.e(TAG, "locale=" + Locale.getDefault());
-        Log.e(TAG, "locale=" + ULocale.forLocale(Locale.getDefault()));
-        Log.e(TAG, "locale=" + LocaleData.getMeasurementSystem(ULocale.forLocale(Locale.getDefault())));
-        Log.e(TAG, "Metric=" + LocaleData.MeasurementSystem.SI);
-        Log.e(TAG, "Metric=" + LocaleData.MeasurementSystem.UK);
-        Log.e(TAG, "Metric=" + LocaleData.MeasurementSystem.US);
-        Log.e(TAG, "Timezone=" + TimeZone.getDefault());
-        Log.e(TAG, "Language=" + Locale.getDefault().getLanguage());
-        Log.e(TAG, "language=" + Locale.getDefault().getDisplayLanguage());
-        Log.e(TAG, "language=" + Locale.getDefault().getISO3Language());
-        Log.e(TAG, "language=" + Locale.getDefault().getDisplayCountry());
-        Log.e(TAG, "language=" + Locale.getDefault().getCountry());
 
-        LocaleList l = LocaleList.getDefault();
-        for(int i = 0; i < l.size(); i++) {
-            Log.e(TAG, "locale=" + l.get(i));
-        }
-        Locale[] locales = Locale.getAvailableLocales();
-        for(Locale locale : locales) {
-            Log.e(TAG, "locale=" + locale);
-        }
-        Locale locale = new Locale("ru");
-        Locale.setDefault(locale);
-    }
-    @SuppressLint("MissingPermission")
-    private void locationManager() {
-        LocationManager location = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Log.e("TAG", "model=" + location.getGnssHardwareModelName());
-        location.addNmeaListener(new OnNmeaMessageListener() {
-            @Override
-            public void onNmeaMessage(String s, long l) {
-                Log.e("TAG", "message=" + s);
-            }
-        });
-        Log.e("TAG", "location=" + location.getLastKnownLocation(location.getGnssHardwareModelName()));
-    }
-    private void mediaProjectionManager() {
-        MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-    }
     private void mediaSession() {
         MediaSessionManager sessionManager = (MediaSessionManager)getSystemService(Context.MEDIA_SESSION_SERVICE);
         List<MediaController> list = sessionManager.getActiveSessions(null);
@@ -663,99 +432,7 @@ public class MyService2 extends Service {
             String devicename = (String)b.get("DEVIC_NAME");
         }
     }
-    private void packageManager() {
-        PackageManager packageManager = getPackageManager();
-        List<ApplicationInfo> packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        for(ApplicationInfo info : packages) {
-            Log.e(TAG, "info=" + info);
-            Log.e(TAG, "info=" + packageManager.getLaunchIntentForPackage(info.className));
-        }
-        //packageManager.deletePackage("com.aptiv.got.testfullframework", null, 0);
-        //packageManager.grant(Manifest.permission.ACCESS_COARSE_LOCATION);
-    }
-    private void secureSettings() {
-        String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.e(TAG, "deviceId=" + id);
-    }
-    private void storageManager() {
-        StorageManager storage = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
-        Log.e(TAG, "primary=" + storage.getPrimaryStorageVolume());
-        //for(StorageVolume volume : storage.getRecentStorageVolumes()) {
-        //    Log.e(TAG, "volume=" + volume);
-        //}
-    }
-    private void systemProperties() {
-        //String text = SystemProperties.get("ro.build.user");
-        //Log.e(TAG, "text=" + text);
-    }
-    private void systemSettings() {
-        Log.e(TAG, "autotime: " + Settings.System.getString(getContentResolver(), Settings.System.AUTO_TIME));
-        Settings.System.putInt(getContentResolver(), Settings.System.AUTO_TIME, 0);
-        Log.e(TAG, "autotime: " + Settings.System.getString(getContentResolver(), Settings.System.AUTO_TIME));
-    }
-    private void telecomManager() {
-        final TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
 
-        // PhoneAccountHandle phoneAccountHandle = new PhoneAccountHandle(new ComponentName(this.getApplicationContext(), MyService.class), "example");
-        //PhoneAccount phoneAccount = PhoneAccount.builder(phoneAccountHandle, "example").setCapabilities(PhoneAccount.CAPABILITY_CALL_PROVIDER).build();
-        //PhoneAccountHandle phoneAccountHandle = telecomManager.getDefaultOutgoingPhoneAccount("ytetet");
-        //Bundle extras = new Bundle();
-        //extras.putParcelable(TelecomManager, uri);
-        //telecom.addNewIncomingCall(phoneAccountHandle, extras);
-
-        @SuppressLint("MissingPermission")
-        final Iterator<PhoneAccountHandle> phoneAccounts = telecomManager.getCallCapablePhoneAccounts().listIterator();
-        while (phoneAccounts.hasNext()) {
-            final PhoneAccountHandle phoneAccountHandle = phoneAccounts.next();
-            final PhoneAccount phoneAccount = telecomManager.getPhoneAccount(phoneAccountHandle);
-            Log.e(TAG, "phoneAccountHandle=" + phoneAccountHandle);
-            Log.e(TAG, "phoneAccount=" + phoneAccount);
-        }
-    }
-    private void telephonyService() {
-        TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        Log.e(TAG, "mobileCarrier=" + telephony.getNetworkOperatorName());
-    }
-    private void updateManager() {
-        /*
-        UpdateEngine updateEngine = new UpdateEngine();
-        Log.e(TAG, "updateEngine=" + updateEngine);
-
-        updateEngine.bind(new UpdateEngineCallback() {
-
-            @Override
-            public void onStatusUpdate(int i, float v) {
-            }
-
-            @Override
-            public void onPayloadApplicationComplete(int i) {
-            }
-        });
-        updateEngine.applyPayload("file:///data/ota_package/payload.bin",0, 22112, getInfo());
-    */
-    }
-    @SuppressLint("MissingPermission")
-    private void wifiManager() {
-        WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        wifi.getScanResults().forEach(scan -> {
-            Log.e(TAG, "scan=" + scan);
-        });
-
-        wifi.getConfiguredNetworks().forEach(network -> {
-            Log.e(TAG, "network=" + network);
-        });
-        Log.e(TAG, "info=" + wifi.getConnectionInfo());
-        Log.e(TAG, "dhcp=" + wifi.getDhcpInfo());
-
-    }
-    private void windowManager() {
-        WindowManager windowManager = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(dm);
-        double x = dm.widthPixels/dm.xdpi;
-        double y = dm.heightPixels/dm.ydpi;
-        Log.e(TAG,"deviceScreenSize: " + x + " x " + y);
-    }
 
     @Override
     public IBinder onBind(Intent intent) {

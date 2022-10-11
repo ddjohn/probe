@@ -53,6 +53,8 @@ android {
 dependencies {
     //compileOnly project(path: ':shadow-classes')
 
+    implementation files('libs/car-31.0.3.jar')
+
     implementation fileTree(dir: 'libs', include: '*.jar')
     implementation fileTree(dir: 'libs', include: '*.aar')
 

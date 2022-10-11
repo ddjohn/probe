@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
+import android.util.Log;
 
 import com.avelon.probe.MyService;
 import com.avelon.probe.areas.AbstractManager;
+
+import java.util.Iterator;
 
 public class DajoTelecomManager extends AbstractManager {
     private TelecomManager manager;
@@ -20,6 +23,7 @@ public class DajoTelecomManager extends AbstractManager {
         manager = (TelecomManager)ctx.getSystemService(Context.TELECOM_SERVICE);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
         /*
@@ -31,6 +35,14 @@ public class DajoTelecomManager extends AbstractManager {
 
         telecom.addNewIncomingCall(phoneAccountHandle, extras);
         */
+       // Log.e(TAG, "mobileCarrier=" + manager.getNetworkOperatorName());
 
+        final Iterator<PhoneAccountHandle> phoneAccounts = manager.getCallCapablePhoneAccounts().listIterator();
+        while (phoneAccounts.hasNext()) {
+            final PhoneAccountHandle phoneAccountHandle = phoneAccounts.next();
+            final PhoneAccount phoneAccount = manager.getPhoneAccount(phoneAccountHandle);
+            Log.i(TAG, "phoneAccountHandle=" + phoneAccountHandle);
+            Log.i(TAG, "phoneAccount=" + phoneAccount);
+        }
     }
 }

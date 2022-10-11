@@ -21,8 +21,8 @@ public class DajoDropboxManager extends AbstractManager {
     public void orchestrate() throws Exception {
         manager.addText("author", "david");
         // /data/system/dropbox
-        //Log.e(TAG, "dropbox=" + manager.getNextEntry("data_app_crash", 1000));
-        //DropBoxManager.Entry entry =  manager.getNextEntry("data_app_crash", 1000);
-        //Log.e(TAG, "text=" + entry.getText(100));
+        Log.i(TAG, "dropbox=" + manager.getNextEntry("data_app_crash", 1000));
+        DropBoxManager.Entry entry =  manager.getNextEntry("data_app_crash", 1000);
+        Log.i(TAG, "text=" + entry.getText(100));
     }
 }

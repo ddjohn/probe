@@ -1,8 +1,6 @@
 package com.avelon.probe;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -20,16 +18,15 @@ import android.media.session.MediaSessionManager;
 import android.os.Bundle;
 import android.os.IBinder;
 //import android.os.SystemProperties;
-import android.os.storage.StorageManager;
-import android.telecom.PhoneAccount;
-import android.telecom.PhoneAccountHandle;
-import android.telecom.TelecomManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.WindowManager;
-import android.view.accessibility.AccessibilityManager;
 
 import com.avelon.probe.areas.AbstractManager;
+import com.avelon.probe.areas.managers.DajoAlarmManager;
+import com.avelon.probe.areas.DajoAlertDialog;
+import com.avelon.probe.areas.managers.DajoBluetoothManager;
+import com.avelon.probe.areas.managers.DajoCarPropertyManager;
+import com.avelon.probe.areas.managers.DajoProjectionManager;
+import com.avelon.probe.areas.managers.DajoStorageManager;
 import com.avelon.probe.areas.managers.DajoTelecomManager;
 import com.avelon.probe.areas.lifecycle.MyServiceLifecycle;
 import com.avelon.probe.areas.managers.DajoDropboxManager;
@@ -38,7 +35,6 @@ import com.avelon.probe.areas.managers.DajoPackageManager;
 import com.avelon.probe.areas.managers.DajoAccountManager;
 import com.avelon.probe.areas.managers.DajoActivityManager;
 import com.avelon.probe.areas.managers.DajoConnectivityManager;
-import com.avelon.probe.areas.managers.DajoAudioManager;
 import com.avelon.probe.areas.DajoBuild;
 import com.avelon.probe.areas.DajoEnvironment;
 import com.avelon.probe.areas.DajoKeyStore;
@@ -49,33 +45,26 @@ import com.avelon.probe.areas.managers.DajoUpdateManager;
 import com.avelon.probe.areas.managers.DajoWifiManager;
 import com.avelon.probe.areas.managers.DajoWindowManager;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class MyService extends MyServiceLifecycle {
     private static final String TAG = MyService.class.getCanonicalName();
+    private DajoProjectionManager projection;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Service")
-                .setPositiveButton("Start", (dialog, id) -> {
-                })
-                .setNegativeButton("Cancel", (dialog, id) -> {
-                });
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.show();
-
         try {
             AbstractManager[] managers = {
                     new DajoAccountManager(this),
                     new DajoActivityManager(this),
-                    new DajoAudioManager(this),
-                    //new DajoBluetoothAdapter(this),
+                    new DajoActivityManager(this),
+                    new DajoAlarmManager(this),
+                    new DajoAlertDialog(this),
+                    new DajoBluetoothManager(this),
                     new DajoBuild(this),
+                    new DajoCarPropertyManager(this),
                     //new DajoCarNavigationStatusManager(this),
                     new DajoConnectivityManager(this),
                     new DajoDownloadManager(this),
@@ -85,7 +74,9 @@ public class MyService extends MyServiceLifecycle {
                     //new DajoLocale(this),
                     new DajoLocationManager(this),
                     new DajoPackageManager(this),
+                    projection = new DajoProjectionManager(this),
                     new DajoSecureSettings(this),
+                    new DajoStorageManager(this),
                     //new DajoSystemProperties(this),
                     new DajoSystemSettings(this),
                     new DajoTelecomManager(this),
@@ -93,7 +84,6 @@ public class MyService extends MyServiceLifecycle {
                     new DajoWifiManager(this),
                     new DajoWindowManager(this),
             };
-
             for (AbstractManager manager : managers) {
                 Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
                 manager.orchestrate();
@@ -103,45 +93,10 @@ public class MyService extends MyServiceLifecycle {
             Log.e(TAG, "exception", e);
         }
 
-        // MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-
-        /*
-        //unsigned int deviceScreenScale() const override;
-        Log.e(TAG,"deviceScreenScale: " + dm.scaledDensity);
-
-        //std::string deviceModelyear() const override;
-        */
-
-//        accessibilityManager();
-        //activityManager();
-        //alarmManager();
-        //bluetoothManager();
         //carNavigationStatusManager();
-        //carPropertyManager();
-        //companionDeviceManager();
-        //devicePolicyManager(componentName);
-        //dropboxManager();
         //mediaSession();
-        //secureSettings();
-        //storageManager();
-        //telecomManager();
-        //telephonyService();
 
         Log.e(TAG, "-- END --");
-    }
-
-    private void devicePolicyManager(ComponentName componentName) {
-        DevicePolicyManager devicePolicyManager = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
-        Log.e(TAG, "Admins:");
-        for(ComponentName name : devicePolicyManager.getActiveAdmins()) {
-            Log.e(TAG, "name=" + name);
-        }
-        devicePolicyManager.lockNow();
-        //devicePolicyManager.setOrganizationId("Aptiv");
-        //devicePolicyManager.setOrganizationName("", "Aptiv");
-        //Log.e(TAG, "failed logins=" + devicePolicyManager.getCurrentFailedPasswordAttempts());
-        //devicePolicyManager.
-        Log.e(TAG, "isAdmin=" + devicePolicyManager.isAdminActive(componentName));
     }
 
     /*
@@ -214,60 +169,6 @@ public class MyService extends MyServiceLifecycle {
             }
         }
     */
-    private void accessibilityManager() {
-        AccessibilityManager accessibility = (AccessibilityManager)getSystemService(Context.ACCESSIBILITY_SERVICE);
-        /*accessibility.getEnabledAccessibilityServiceList(AccessibilityManager.FLAG_CONTENT_TEXT).forEach(service -> {
-            Log.e(TAG, "service=" + service);
-        });
-        accessibility.getInstalledAccessibilityServiceList().forEach(instance -> {
-            Log.e(TAG, "instance=" + instance);
-        });*/
-    }
-
-    private void alarmManager() {
-        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Log.e(TAG, "alarm=" + alarm.getNextAlarmClock());
-    }
-
-    @SuppressLint("MissingPermission")
-    private void bluetoothManager() {
-        BluetoothManager bluetooth = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
-        Log.e(TAG, "adapter=" + bluetooth.getAdapter());
-        Log.e(TAG, "adapter=" + bluetooth.getConnectedDevices(BluetoothProfile.GATT));
-
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        adapter.enable();
-        //adapter.getSupportedProfiles();
-    }
-
-    private void carPropertyManager() {
-        Car car = Car.createCar(this);
-        CarPropertyManager propertyManager = (CarPropertyManager)car.getCarManager(Car.PROPERTY_SERVICE);
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.INFO_MAKE, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.NIGHT_MODE, 0));
-        //Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.PERF_VEHICLE_SPEED, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
-        Log.e(TAG, "" + propertyManager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
-        propertyManager.getPropertyList().forEach(property -> Log.e(TAG, "property=" + property));
-        propertyManager.registerCallback(new CarPropertyManager.CarPropertyEventCallback() {
-            @Override
-            public void onChangeEvent(CarPropertyValue carPropertyValue) {
-                Log.e(TAG, "286261505=" + carPropertyValue);
-            }
-
-            @Override
-            public void onErrorEvent(int i, int i1) {
-                Log.e(TAG, "erroe=" + i + i1);
-            }
-        }, VehiclePropertyIds.INFO_MAKE, CarPropertyManager.SENSOR_RATE_UI);
-    }
-    private void companionDeviceManager() {
-        CompanionDeviceManager companionDeviceManager = (CompanionDeviceManager)getSystemService(Context.COMPANION_DEVICE_SERVICE);
-        companionDeviceManager.getAssociations().forEach(phone -> {
-            Log.e(TAG, "phone=" + phone);
-        });
-    }
 
     private void mediaSession() {
         MediaSessionManager sessionManager = (MediaSessionManager)getSystemService(Context.MEDIA_SESSION_SERVICE);
@@ -277,36 +178,6 @@ public class MyService extends MyServiceLifecycle {
             Bundle b = l.getExtras();
             String devicename = (String)b.get("DEVIC_NAME");
         }
-    }
-
-    private void storageManager() {
-        StorageManager storage = (StorageManager)getSystemService(Context.STORAGE_SERVICE);
-        Log.e(TAG, "primary=" + storage.getPrimaryStorageVolume());
-        //for(StorageVolume volume : storage.getRecentStorageVolumes()) {
-        //    Log.e(TAG, "volume=" + volume);
-        //}
-    }
-
-    private void telecomManager() {
-        final TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
-
-        @SuppressLint("MissingPermission")
-        final Iterator<PhoneAccountHandle> phoneAccounts = telecomManager.getCallCapablePhoneAccounts().listIterator();
-        while (phoneAccounts.hasNext()) {
-            final PhoneAccountHandle phoneAccountHandle = phoneAccounts.next();
-            final PhoneAccount phoneAccount = telecomManager.getPhoneAccount(phoneAccountHandle);
-            Log.e(TAG, "phoneAccountHandle=" + phoneAccountHandle);
-            Log.e(TAG, "phoneAccount=" + phoneAccount);
-        }
-    }
-    private void telephonyService() {
-        TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        Log.e(TAG, "mobileCarrier=" + telephony.getNetworkOperatorName());
-    }
-    @SuppressLint("MissingPermission")
-    private void wifiManager() {
-
-
     }
 
     @Override
