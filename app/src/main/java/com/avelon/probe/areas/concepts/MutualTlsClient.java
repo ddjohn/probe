@@ -44,7 +44,7 @@ public class MutualTlsClient {
 
         URL url = new URL("https://localhost:8443/");
         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
-       // connection.setHostnameVerifier((hostname, session) -> true);
+        connection.setHostnameVerifier((hostname, session) -> true);
         connection.setSSLSocketFactory(context.getSocketFactory());
         connection.connect();
 
