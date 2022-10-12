@@ -36,6 +36,9 @@ public class MainActivity extends MyActivityLifecycle {
             return;
         }
 
+        // Receivers
+        MyReceiver receiver = new MyReceiver(this);
+
         // Starting Services
        startService(new Intent(this, MyService.class));
 
@@ -52,15 +55,12 @@ public class MainActivity extends MyActivityLifecycle {
                         MediaController mediaController = new MediaController(MainActivity.this, token);
                         Log.e(TAG, "controller=" + mediaController);
 
-
                         String root = mediaBrowser.getRoot();
                         Log.i(TAG, "MediaRoot=" + root);
-
                     }
                 },
                 null);
         Log.e(TAG, "browser=" + mediaBrowser);
-
     }
 
     @Override
@@ -81,9 +81,6 @@ public class MainActivity extends MyActivityLifecycle {
         catch(Exception e) {
             Log.e(TAG, "exception", e);
         }
-
-        // Receivers
-        MyReceiver receiver = new MyReceiver(this);
 
         // Concepts
         MyConcepts concepts = new MyConcepts(this);

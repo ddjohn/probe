@@ -11,8 +11,8 @@ import java.util.Locale;
 
 public class DajoTextToSpeech extends AbstractManager {
     public static final int REQUEST_CODE = 111;
-    //private TemplateManager manager;
     public static String[] permissions = new String[] {};
+
     private Context ctx;
     private TextToSpeech tts;
 
