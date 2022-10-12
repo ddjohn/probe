@@ -25,6 +25,6 @@ public class DajoAlertDialog extends AbstractManager {
 
     @Override
     public void orchestrate() throws Exception {
-        dialog.show();
+        //dialog.show();
     }
 }
