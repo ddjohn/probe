@@ -20,4 +20,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "DownloadMgr"
 include ':app'
-include ':shadow-classes'
+include ':aar-library'
+include ':jar-library'

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
     packagingOptions {
         resources {
             pickFirsts += ['META-INF/DEPENDENCIES']
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId "com.avelon.probe"
         minSdk 30
-        targetSdk 30
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -51,7 +51,8 @@ android {
 }
 
 dependencies {
-    //compileOnly project(path: ':shadow-classes')
+    implementation project(path: ':aar-library')
+    implementation project(path: ':jar-library')
 
     implementation files('libs/car-31.0.3.jar')
 

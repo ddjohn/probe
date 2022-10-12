@@ -10,8 +10,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/aar-library" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/shadow-classes" />
+            <option value="$PROJECT_DIR$/jar-library" />
           </set>
         </option>
       </GradleProjectSettings>
