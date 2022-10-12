@@ -54,7 +54,7 @@ public class MutualTlsServer {
         /*
          * Initiate security on the socket communication
          */
-        Log.i(TAG, "SSL Provider: " +SSLContext.getDefault().getProvider());
+        Log.i(TAG, "SSL Provider: " + SSLContext.getDefault().getProvider());
         SSLContext ssl = SSLContext.getInstance(TLS_VERSION);
         ssl.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),  new SecureRandom());
         InetSocketAddress address = new InetSocketAddress("0.0.0.0", 8443);

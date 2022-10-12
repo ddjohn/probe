@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.avelon.probe.areas.AbstractManager;
 import com.avelon.probe.areas.DajoAlertDialog;
+import com.avelon.probe.areas.DajoTextToSpeech;
 import com.avelon.probe.areas.managers.DajoProjectionManager;
 import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -35,6 +36,7 @@ public class MainActivity extends MyActivityLifecycle {
 
     private MyPermissions permissions;
     private DajoProjectionManager projection;
+    private DajoTextToSpeech tts;
 
     MediaBrowser mediaBrowser = null;
 
@@ -181,6 +183,7 @@ catch(Exception e) {
         try {
             AbstractManager[] managers = {
                     new DajoAlertDialog(this),
+                    tts = new DajoTextToSpeech(this),
                     projection = new DajoProjectionManager(this),
             };
             for (AbstractManager manager : managers) {
@@ -216,6 +219,10 @@ catch(Exception e) {
             }
             case DajoProjectionManager.REQUEST_CODE: {
                 projection.onActivityResult(requestCode, resultCode, data);
+                break;
+            }
+            case DajoTextToSpeech.REQUEST_CODE: {
+                tts.onActivityResult(requestCode, resultCode, data);
                 break;
             }
             default: {
