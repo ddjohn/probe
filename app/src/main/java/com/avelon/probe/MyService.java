@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import com.avelon.probe.areas.AbstractManager;
+import com.avelon.probe.areas.DajoContentResolver;
 import com.avelon.probe.areas.carmanagers.DajoCarDrivingStateManager;
 import com.avelon.probe.areas.carmanagers.DajoCarUxRestrictionManager;
 import com.avelon.probe.areas.managers.DajoAlarmManager;
@@ -61,6 +62,7 @@ public class MyService extends MyServiceLifecycle {
                     new DajoCarUxRestrictionManager(this),
                     new DajoCarPropertyManager(this),
                     new DajoConnectivityManager(this),
+                    new DajoContentResolver(this),
                     new DajoDownloadManager(this),
                     new DajoDropboxManager(this),
                     new DajoEnvironment(this),

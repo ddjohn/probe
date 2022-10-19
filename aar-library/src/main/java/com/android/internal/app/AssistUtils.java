@@ -10,4 +10,8 @@ public class AssistUtils {
     public ComponentName getAssistComponentForUser(int user) {
         return null;
     }
+
+    public void registerVoiceInteractionSessionListener(IVoiceInteractionSessionListener listener) {
+
+    }
 }

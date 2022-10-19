@@ -51,7 +51,7 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':aar-library')
+    compileOnly project(path: ':aar-library')
     implementation project(path: ':jar-library')
 
     implementation files('libs/car-31.0.3.jar')

@@ -30,7 +30,7 @@ public class DajoProjectionManager extends AbstractManager {
 
     @Override
     public void orchestrate() throws Exception {
-        ((Activity)ctx).startActivityForResult(manager.createScreenCaptureIntent(), REQUEST_CODE);
+        //((Activity)ctx).startActivityForResult(manager.createScreenCaptureIntent(), REQUEST_CODE);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

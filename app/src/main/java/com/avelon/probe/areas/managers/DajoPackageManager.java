@@ -1,7 +1,9 @@
 package com.avelon.probe.areas.managers;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.FeatureInfo;
@@ -39,9 +41,9 @@ public class DajoPackageManager extends AbstractManager {
         }
 
         for(PackageInfo pkg : manager.getInstalledPackages(PackageManager.GET_ACTIVITIES | PackageManager.GET_META_DATA | PackageManager.GET_INTENT_FILTERS)) {
-            Log.i(TAG, "package: " + pkg.packageName);
+            Log.i(TAG, "DDDD package: " + pkg.packageName);
             Log.i(TAG, "user: " + pkg.sharedUserId);
-            Log.i(TAG, "version: " + pkg.versionName);
+            Log.i(TAG, "DDDD version: " + pkg.versionName);
             for(ActivityInfo activity : (pkg.activities != null ? pkg.activities : new ActivityInfo[] {})) {
                 Log.i(TAG, "activity: " + activity);
             }
@@ -74,14 +76,52 @@ public class DajoPackageManager extends AbstractManager {
             Intent intent = new Intent(action, null);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
 
-            ResolveInfo resolveInfo = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            if(resolveInfo != null)
-                Log.e(TAG, "---> " + action + ":" + resolveInfo.activityInfo.name);
-
-            List<ResolveInfo> apps = ctx.getPackageManager().queryIntentActivities(intent, 0);
-            if(apps.size() > 0) {
-                Log.e(TAG, "+++> " + action + ":" + apps.get(0).activityInfo.name);
-            }
+            ResolveInfo resolve = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if(resolve != null)
+                Log.e(TAG, "---> " + action + ":" + (resolve == null ? resolve : resolve.activityInfo.name));
         }
+
+        {
+            Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND, null);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            ResolveInfo resolve = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            Log.e(TAG, "---> ACTION_VOICE_COMMAND: " + (resolve == null ? resolve : resolve.activityInfo.name));
+        }
+        {
+            Intent intent = new Intent(Intent.ACTION_ASSIST, null);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            ResolveInfo resolve = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            Log.e(TAG, "---> ACTION_ASSIST: " + (resolve == null ? resolve : resolve.activityInfo.name));
+        }
+        {
+            Intent intent = new Intent(Intent.ACTION_DIAL, null);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            ResolveInfo info = manager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            Log.e(TAG, "www: " + (info == null ? "" + info : info.activityInfo.name));
+        }
+        {
+            Intent intent = new Intent(Intent.ACTION_ASSIST, null);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            ResolveInfo info = manager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            Log.e(TAG, "assistant: " + (info == null ? "" + info : info.activityInfo.name));
+        }
+        {
+            Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND, null);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            ResolveInfo info = manager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            Log.e(TAG, "voice: " + (info == null ? "" + info : info.activityInfo.name));
+        }
+
+        IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
+        filter.addCategory(Intent.CATEGORY_HOME);
+
+        List<IntentFilter> filters = new ArrayList<>();
+        filters.add(filter);
+        List<ComponentName> activities = new ArrayList<>();
+        manager.getPreferredActivities(filters, activities, null);
+        for (ComponentName activity : activities) {
+            Log.d(TAG, "======packet default:===" + activity.getPackageName());
+        }
+
     }
 }

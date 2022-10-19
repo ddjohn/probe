@@ -8,6 +8,7 @@ import android.security.keystore.KeyProperties;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -15,6 +16,8 @@ import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
+import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -24,22 +27,62 @@ import java.util.Enumeration;
 public class DajoKeyStore extends AbstractManager {
     private KeyStore keyStore;
     public static String[] permissions = new String[] {};
+    private static final String KEYSTORE = "AndroidKeyStore";
 
     public DajoKeyStore(Context ctx) throws Exception {
         super(ctx, permissions);
 
-        keyStore = KeyStore.getInstance("AndroidKeyStore");
+        keyStore = KeyStore.getInstance(KEYSTORE);
         keyStore.load(null);
+        Log.e(TAG, "keystore= "  + keyStore);
+        Log.e(TAG, "provider=" + keyStore.getProvider());
+        Log.e(TAG, "provider=" + keyStore.getType());
+        // Create keystore
+        {
+            Log.e(TAG, "default=" + KeyStore.getDefaultType());
+            KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+            ks.load(null, "password".toCharArray());
+            FileOutputStream fos = new FileOutputStream("/data/local/tmp/newKeyStoreFileName");
+            ks.store(fos, "password".toCharArray());
+            fos.close();
+
+/*
+            KeyStore.getInstance("JKS");
+            KeyStore.getInstance("BKS");
+  */
+            /*
+            ndroidCAStore	14+
+                AndroidKeyStore	18+
+                BCPKCS12	1-8
+            BKS	1+
+                BouncyCastle	1+
+                PKCS12	1+
+                */
+
+            for(Provider provider : Security.getProviders()) {
+                Log.e(TAG, "provider: " + provider);
+                Enumeration<Object> params = provider.elements();
+                //while(params.hasMoreElements()) {
+                    //Log.e(TAG, "   params: " + params.nextElement());
+                //}
+               //Log.e(TAG, "provider: " + Security.getAlgorithms(provider.getName()));
+            }
+        }
     }
 
     @Override
     public void orchestrate() throws Exception {
-        KeyPairGenerator generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
+       while(keyStore.aliases().hasMoreElements()) {
+           //Log.e(TAG, "alias=" + keyStore.aliases().nextElement());
+       }
+
+
+        KeyPairGenerator generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, KEYSTORE);
         generator.initialize(new KeyGenParameterSpec.Builder("alias", KeyProperties.PURPOSE_ENCRYPT)
                 .setAlgorithmParameterSpec(new ECGenParameterSpec("secp384r1"))
                 .build());
         KeyPair pair = generator.generateKeyPair();
-        KeyFactory factory = KeyFactory.getInstance(pair.getPrivate().getAlgorithm(), "AndroidKeyStore");
+        KeyFactory factory = KeyFactory.getInstance(pair.getPrivate().getAlgorithm(), KEYSTORE);
         KeyInfo info = factory.getKeySpec(pair.getPrivate(), KeyInfo.class);
         System.out.println("" + info.isInsideSecureHardware());
 
@@ -65,7 +108,7 @@ public class DajoKeyStore extends AbstractManager {
         try {
             {
                 // Diagnostic Routine
-                KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+                KeyStore keyStore = KeyStore.getInstance(KEYSTORE);
                 keyStore.load(null);
 
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
@@ -76,7 +119,7 @@ public class DajoKeyStore extends AbstractManager {
 
             // Android Auto
             {
-                KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+                KeyStore keyStore = KeyStore.getInstance(KEYSTORE);
                 keyStore.load(null);
 
                 Enumeration<String> aliases = keyStore.aliases();

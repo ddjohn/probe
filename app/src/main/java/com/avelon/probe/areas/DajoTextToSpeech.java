@@ -27,7 +27,7 @@ public class DajoTextToSpeech extends AbstractManager {
     public void orchestrate() throws Exception {
         Intent intent = new Intent();
         intent.setAction(android.speech.tts.TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        ((Activity)ctx).startActivityForResult(intent, REQUEST_CODE);
+        //((Activity)ctx).startActivityForResult(intent, REQUEST_CODE);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
