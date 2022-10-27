@@ -9,19 +9,19 @@ public abstract class MyServiceLifecycle extends Service {
 
     @Override
     public void onCreate() {
-        Log.e(TAG, "onCreate()");
+        Log.i(TAG, "onCreate()");
         super.onCreate();
     }
 
     @Override
     public void onDestroy() {
-        Log.e(TAG, "onDestroy()");
+        Log.i(TAG, "onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand()");
+        Log.i(TAG, "onStartCommand()");
         return super.onStartCommand(intent, flags, startId);
     }
 }

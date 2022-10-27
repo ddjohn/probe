@@ -8,6 +8,7 @@ import android.car.VehiclePropertyIds;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.property.CarPropertyManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
 
@@ -24,17 +25,19 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
     public DajoCarPropertyManager(Context ctx) throws Exception {
         super(ctx, permissions);
 
-        // Get manager
+        this.checkFeature(PackageManager.FEATURE_AUTOMOTIVE);
+
+        // Manager
         Car car = Car.createCar(ctx);
         manager = (CarPropertyManager)car.getCarManager(Car.PROPERTY_SERVICE);
 
-        // Register listeners
-
+        // Listeners
         manager.getPropertyList().forEach(property -> {
             Log.i(TAG, "Register " + property);
             manager.registerCallback(this, property.getPropertyId(), CarPropertyManager.SENSOR_RATE_ONCHANGE);
             manager.registerCallback(this, property.getPropertyId(), CarPropertyManager.SENSOR_RATE_NORMAL);
         });
+
     }
 
     @SuppressLint("MissingPermission")
@@ -67,11 +70,11 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
 
     @Override
     public void onChangeEvent(CarPropertyValue carPropertyValue) {
-        Log.e(TAG, "onChangeEvent(): " + carPropertyValue);
+        Log.e(TAG, "cb:onChangeEvent(): " + carPropertyValue);
     }
 
     @Override
     public void onErrorEvent(int i, int i1) {
-        Log.e(TAG, "onErrorEvent(): " + i + i1);
+        Log.e(TAG, "cb:onErrorEvent(): " + i + i1);
     }
 }

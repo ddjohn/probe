@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.avelon.probe.areas.AbstractManager;
@@ -17,6 +18,8 @@ public class DajoBluetoothManager extends AbstractManager {
     public DajoBluetoothManager(Context ctx) throws Exception {
         super(ctx, permissions);
 
+        checkFeature(PackageManager.FEATURE_BLUETOOTH);
+
         manager = (BluetoothManager)ctx.getSystemService(Context.BLUETOOTH_SERVICE);
         adapter = BluetoothAdapter.getDefaultAdapter();
     }
@@ -24,9 +27,9 @@ public class DajoBluetoothManager extends AbstractManager {
     @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
-        Log.e(TAG, "adapter=" + manager.getAdapter());
-        Log.e(TAG, "adapter=" + adapter);
-        Log.e(TAG, "adapter=" + manager.getConnectedDevices(BluetoothProfile.GATT));
+        Log.i(TAG, "adapter=" + manager.getAdapter());
+        Log.i(TAG, "adapter=" + adapter);
+        Log.i(TAG, "adapter=" + manager.getConnectedDevices(BluetoothProfile.GATT));
 
         adapter.enable();
         //adapter.getSupportedProfiles();
@@ -35,6 +38,5 @@ public class DajoBluetoothManager extends AbstractManager {
         //Log.e(TAG, "" + android.bluetooth.BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
         //Log.e("MUNGO", "" + android.bluetooth.BluetoothHeadsetClientCall.CALL_STATE_ACTIVE);
         //Log.e("MUNGO", "" + BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
-
     }
 }

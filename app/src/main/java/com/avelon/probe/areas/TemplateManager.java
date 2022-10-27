@@ -10,7 +10,10 @@ public class TemplateManager extends AbstractManager {
     public TemplateManager(Context ctx) throws Exception {
         super(ctx, permissions);
 
+        /* Manager */
         //manager = (TemplateManager) ctx.getSystemService(Context.TEMPLATE_SERVICE);
+
+        /* Listeners */
     }
 
     @SuppressLint("MissingPermission")

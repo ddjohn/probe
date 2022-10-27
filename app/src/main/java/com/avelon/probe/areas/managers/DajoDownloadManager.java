@@ -63,14 +63,14 @@ public class DajoDownloadManager extends AbstractManager {
         for(int c : columns) {
             s2 += "," + cursor.getColumnName(c);
         }
-        Log.e(TAG, "name=" + s2);
+        Log.i(TAG, "name=" + s2);
 
         while (cursor.moveToNext()) {
             String s = "";
             for(int c : columns) {
                 s += "," + cursor.getString(c);
             }
-            Log.e(TAG, "name=" + s);
+            Log.i(TAG, "name=" + s);
         }
         cursor.close();
 

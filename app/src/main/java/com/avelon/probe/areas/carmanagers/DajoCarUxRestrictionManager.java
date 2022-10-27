@@ -5,20 +5,27 @@ import android.car.Car;
 import android.car.drivingstate.CarUxRestrictions;
 import android.car.drivingstate.CarUxRestrictionsManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.avelon.probe.areas.AbstractManager;
 
-public class DajoCarUxRestrictionManager extends AbstractManager {
+public class DajoCarUxRestrictionManager extends AbstractManager implements CarUxRestrictionsManager.OnUxRestrictionsChangedListener {
     private CarUxRestrictionsManager manager;
     public static String[] permissions = new String[] {};
 
     public DajoCarUxRestrictionManager(Context ctx) throws Exception {
         super(ctx, permissions);
 
-        Car car = Car.createCar(ctx);
+        this.checkFeature(PackageManager.FEATURE_AUTOMOTIVE);
 
+        /* Manager */
+        Car car = Car.createCar(ctx);
         manager = (CarUxRestrictionsManager)car.getCarManager(Car.CAR_UX_RESTRICTION_SERVICE);
+
+        /* LIsteners*/
+        manager.registerListener(this);
+
     }
 
     @SuppressLint("MissingPermission")
@@ -63,5 +70,10 @@ public class DajoCarUxRestrictionManager extends AbstractManager {
             }
         }
         return result.toString();
+    }
+
+    @Override
+    public void onUxRestrictionsChanged(CarUxRestrictions carUxRestrictions) {
+        Log.e(TAG, "cb:onUxRestrictionsChanged(): " + carUxRestrictions);
     }
 }

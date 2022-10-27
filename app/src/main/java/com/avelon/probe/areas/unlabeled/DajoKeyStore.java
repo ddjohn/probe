@@ -36,12 +36,12 @@ public class DajoKeyStore extends AbstractManager {
 
         keyStore = KeyStore.getInstance(KEYSTORE);
         keyStore.load(null);
-        Log.e(TAG, "keystore= "  + keyStore);
-        Log.e(TAG, "provider=" + keyStore.getProvider());
-        Log.e(TAG, "provider=" + keyStore.getType());
+        Log.i(TAG, "keystore= "  + keyStore);
+        Log.i(TAG, "provider=" + keyStore.getProvider());
+        Log.i(TAG, "provider=" + keyStore.getType());
         // Create keystore
         {
-            Log.e(TAG, "default=" + KeyStore.getDefaultType());
+            Log.i(TAG, "default=" + KeyStore.getDefaultType());
             KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
             ks.load(null, "password".toCharArray());
             //FileOutputStream fos = new FileOutputStream("/data/local/tmp/newKeyStoreFileName");
@@ -62,7 +62,7 @@ public class DajoKeyStore extends AbstractManager {
                 */
 
             for(Provider provider : Security.getProviders()) {
-                Log.e(TAG, "provider: " + provider);
+                Log.i(TAG, "provider: " + provider);
                 Enumeration<Object> params = provider.elements();
                 //while(params.hasMoreElements()) {
                     //Log.e(TAG, "   params: " + params.nextElement());
@@ -77,7 +77,6 @@ public class DajoKeyStore extends AbstractManager {
        while(keyStore.aliases().hasMoreElements()) {
            //Log.e(TAG, "alias=" + keyStore.aliases().nextElement());
        }
-
 
         KeyPairGenerator generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, KEYSTORE);
         generator.initialize(new KeyGenParameterSpec.Builder("alias", KeyProperties.PURPOSE_ENCRYPT)

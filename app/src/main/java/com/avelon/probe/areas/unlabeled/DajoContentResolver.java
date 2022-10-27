@@ -19,13 +19,16 @@ public class DajoContentResolver extends AbstractManager {
     public DajoContentResolver(Context ctx) throws Exception {
         super(ctx, permissions);
 
-        ContentResolver resolver = ctx.getContentResolver();
+        /* Manager */
+        resolver = ctx.getContentResolver();
+
+        /* Listeners */
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
-        Log.e(TAG, "" + Settings.Secure.getUriFor("assistant"));
+        Log.i(TAG, "" + Settings.Secure.getUriFor("assistant"));
         resolver.registerContentObserver(Settings.Secure.getUriFor("assistant"), true, new ContentObserver(new Handler()) {
             @Override
             public void onChange(boolean selfChange) {

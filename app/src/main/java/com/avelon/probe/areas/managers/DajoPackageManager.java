@@ -123,5 +123,8 @@ public class DajoPackageManager extends AbstractManager {
             Log.d(TAG, "======packet default:===" + activity.getPackageName());
         }
 
+        for(FeatureInfo feature : manager.getSystemAvailableFeatures()) {
+            Log.e(TAG, " feature: " + feature);
+        }
     }
 }

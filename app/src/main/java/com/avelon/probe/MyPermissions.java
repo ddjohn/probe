@@ -31,12 +31,12 @@ public class MyPermissions {
     }
 
     public void request() {
-        Log.e(TAG, "request()");
+        Log.i(TAG, "request()");
         activity.requestPermissions(permissions, REQUEST_CODE);
     }
 
     public boolean check() {
-        Log.e(TAG, "check()");
+        Log.i(TAG, "check()");
         for(String permission: permissions) {
             Log.i(TAG, "Checking permission: " + permission);
             if(activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {

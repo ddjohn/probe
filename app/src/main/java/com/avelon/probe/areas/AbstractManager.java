@@ -16,6 +16,12 @@ public abstract class AbstractManager {
 
     public abstract void orchestrate() throws Exception;
 
+    protected void checkFeature(String feature) throws NoFeatureException {
+        if(!ctx.getPackageManager().hasSystemFeature(feature)) {
+            throw new NoFeatureException("No feature: " + feature);
+        }
+    }
+
     protected boolean neededPermissions(String[] permissions) {
         for(String permission : permissions) {
             if (ctx.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
@@ -24,5 +30,11 @@ public abstract class AbstractManager {
             }
         }
         return true;
+    }
+
+    public class NoFeatureException extends Exception {
+        public NoFeatureException(String s) {
+            super(s);
+        }
     }
 }
