@@ -1,4 +1,4 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 import java.util.Locale;
 

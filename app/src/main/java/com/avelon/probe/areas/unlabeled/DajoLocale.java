@@ -1,4 +1,4 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.icu.util.LocaleData;
 import android.icu.util.ULocale;
 import android.os.LocaleList;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 import java.util.Locale;
 import java.util.TimeZone;

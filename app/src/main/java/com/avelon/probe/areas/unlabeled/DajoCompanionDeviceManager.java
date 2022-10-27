@@ -1,9 +1,11 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.annotation.SuppressLint;
 import android.companion.CompanionDeviceManager;
 import android.content.Context;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 public class DajoCompanionDeviceManager extends AbstractManager {
     private CompanionDeviceManager manager;

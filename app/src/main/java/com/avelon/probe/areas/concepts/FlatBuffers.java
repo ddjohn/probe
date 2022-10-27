@@ -1,4 +1,4 @@
-package com.avelon.probe.concepts;
+package com.avelon.probe.areas.concepts;
 
 import android.content.Context;
 import android.util.Log;

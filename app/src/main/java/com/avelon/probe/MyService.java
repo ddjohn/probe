@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import com.avelon.probe.areas.AbstractManager;
-import com.avelon.probe.areas.DajoContentResolver;
+import com.avelon.probe.areas.unlabeled.DajoContentResolver;
 import com.avelon.probe.areas.carmanagers.DajoCarDrivingStateManager;
+import com.avelon.probe.areas.carmanagers.DajoCarUserManager;
 import com.avelon.probe.areas.carmanagers.DajoCarUxRestrictionManager;
 import com.avelon.probe.areas.managers.DajoAlarmManager;
-import com.avelon.probe.areas.DajoAlertDialog;
+import com.avelon.probe.areas.unlabeled.DajoAlertDialog;
 import com.avelon.probe.areas.managers.DajoBluetoothManager;
 import com.avelon.probe.areas.carmanagers.DajoCarNavigationStatusManager;
 import com.avelon.probe.areas.carmanagers.DajoCarPropertyManager;
@@ -20,15 +21,15 @@ import com.avelon.probe.areas.managers.DajoStorageManager;
 import com.avelon.probe.areas.managers.DajoTelecomManager;
 import com.avelon.probe.areas.lifecycle.MyServiceLifecycle;
 import com.avelon.probe.areas.managers.DajoDropboxManager;
-import com.avelon.probe.areas.DajoSecureSettings;
+import com.avelon.probe.areas.unlabeled.DajoSecureSettings;
 import com.avelon.probe.areas.managers.DajoPackageManager;
 import com.avelon.probe.areas.managers.DajoAccountManager;
 import com.avelon.probe.areas.managers.DajoActivityManager;
 import com.avelon.probe.areas.managers.DajoConnectivityManager;
-import com.avelon.probe.areas.DajoBuild;
-import com.avelon.probe.areas.DajoEnvironment;
-import com.avelon.probe.areas.DajoKeyStore;
-import com.avelon.probe.areas.DajoSystemSettings;
+import com.avelon.probe.areas.unlabeled.DajoBuild;
+import com.avelon.probe.areas.unlabeled.DajoEnvironment;
+import com.avelon.probe.areas.unlabeled.DajoKeyStore;
+import com.avelon.probe.areas.unlabeled.DajoSystemSettings;
 import com.avelon.probe.areas.managers.DajoDownloadManager;
 import com.avelon.probe.areas.managers.DajoLocationManager;
 import com.avelon.probe.areas.managers.DajoUpdateManager;
@@ -59,6 +60,7 @@ public class MyService extends MyServiceLifecycle {
                     new DajoBuild(this),
                     new DajoCarDrivingStateManager(this),
                     new DajoCarNavigationStatusManager(this),
+                    new DajoCarUserManager(this),
                     new DajoCarUxRestrictionManager(this),
                     new DajoCarPropertyManager(this),
                     new DajoConnectivityManager(this),
@@ -81,7 +83,12 @@ public class MyService extends MyServiceLifecycle {
             };
             for (AbstractManager manager : managers) {
                 Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
-                manager.orchestrate();
+                try {
+                    manager.orchestrate();
+                }
+                catch(Exception e) {
+                    Log.e(TAG, "exception", e);
+                }
             }
         }
         catch(Exception e) {

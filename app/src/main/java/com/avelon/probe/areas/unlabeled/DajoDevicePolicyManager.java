@@ -1,10 +1,12 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.annotation.SuppressLint;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 public class DajoDevicePolicyManager extends AbstractManager {
     private DevicePolicyManager manager;

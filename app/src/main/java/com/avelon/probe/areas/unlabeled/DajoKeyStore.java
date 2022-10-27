@@ -1,4 +1,4 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
@@ -42,9 +44,9 @@ public class DajoKeyStore extends AbstractManager {
             Log.e(TAG, "default=" + KeyStore.getDefaultType());
             KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
             ks.load(null, "password".toCharArray());
-            FileOutputStream fos = new FileOutputStream("/data/local/tmp/newKeyStoreFileName");
-            ks.store(fos, "password".toCharArray());
-            fos.close();
+            //FileOutputStream fos = new FileOutputStream("/data/local/tmp/newKeyStoreFileName");
+            //ks.store(fos, "password".toCharArray());
+            //fos.close();
 
 /*
             KeyStore.getInstance("JKS");

@@ -1,4 +1,4 @@
-package com.avelon.probe.areas.concepts;
+package com.avelon.probe.areas.concepts.tls;
 
 import android.content.Context;
 import android.os.StrictMode;
@@ -14,7 +14,6 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;

@@ -1,33 +1,19 @@
 package com.avelon.probe;
 
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.database.ContentObserver;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 
-import com.android.internal.app.IVoiceInteractionSessionListener;
 import com.avelon.probe.areas.AbstractManager;
-import com.avelon.probe.areas.DajoAlertDialog;
-import com.avelon.probe.areas.DajoKeyStore;
-import com.avelon.probe.areas.DajoTextToSpeech;
-import com.avelon.probe.areas.managers.DajoPackageManager;
+import com.avelon.probe.areas.unlabeled.DajoAlertDialog;
+import com.avelon.probe.areas.unlabeled.DajoTextToSpeech;
 import com.avelon.probe.areas.managers.DajoProjectionManager;
 import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends MyActivityLifecycle {
     private static final String TAG = MainActivity.class.getCanonicalName();

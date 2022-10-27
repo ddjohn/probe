@@ -1,9 +1,11 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 public class DajoEnvironment extends AbstractManager {
     public static String[] permissions = new String[] {};

@@ -1,8 +1,10 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
+
+import com.avelon.probe.areas.AbstractManager;
 
 public class DajoSecureSettings extends AbstractManager {
     //private TemplateManager manager;

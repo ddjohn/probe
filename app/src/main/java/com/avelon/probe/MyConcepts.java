@@ -2,12 +2,11 @@ package com.avelon.probe;
 
 import android.content.Context;
 import android.util.Log;
-import com.avelon.probe.areas.concepts.MutualTlsClient;
-import com.avelon.probe.areas.concepts.MutualTlsServer;
-import com.avelon.probe.concepts.EncodeAndMux;
-import com.avelon.probe.concepts.MQTT;
-import com.avelon.probe.concepts.RecursiveScan;
-import com.avelon.probe.concepts.WebServer;
+import com.avelon.probe.areas.concepts.tls.MutualTlsClient;
+import com.avelon.probe.areas.concepts.tls.MutualTlsServer;
+import com.avelon.probe.areas.concepts.EncodeAndMux;
+import com.avelon.probe.areas.concepts.RecursiveScan;
+import com.avelon.probe.areas.concepts.WebServer;
 
 public class MyConcepts {
     private static final String TAG = MyConcepts.class.getSimpleName();

@@ -1,4 +1,4 @@
-package com.avelon.probe.concepts;
+package com.avelon.probe.areas.concepts;
 
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;

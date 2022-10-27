@@ -1,4 +1,4 @@
-package com.avelon.probe.areas.concepts;
+package com.avelon.probe.areas.concepts.tls;
 
 import java.io.InputStream;
 import java.security.KeyStore;

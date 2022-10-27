@@ -1,9 +1,11 @@
-package com.avelon.probe.areas;
+package com.avelon.probe.areas.unlabeled;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.WindowManager;
+
+import com.avelon.probe.areas.AbstractManager;
 
 public class DajoAlertDialog extends AbstractManager {
     //private TemplateManager manager;
