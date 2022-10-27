@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import com.avelon.probe.areas.AbstractManager;
+import com.avelon.probe.areas.managers.DajoMediaSessionManager;
 import com.avelon.probe.areas.unlabeled.DajoContentResolver;
 import com.avelon.probe.areas.carmanagers.DajoCarDrivingStateManager;
 import com.avelon.probe.areas.carmanagers.DajoCarUserManager;
@@ -58,31 +59,35 @@ public class MyService extends MyServiceLifecycle {
                     new DajoAlertDialog(this),
                     new DajoBluetoothManager(this),
                     new DajoBuild(this),
-                    new DajoCarDrivingStateManager(this),
-                    new DajoCarNavigationStatusManager(this),
-                    new DajoCarUserManager(this),
-                    new DajoCarUxRestrictionManager(this),
-                    new DajoCarPropertyManager(this),
                     new DajoConnectivityManager(this),
                     new DajoContentResolver(this),
                     new DajoDownloadManager(this),
                     new DajoDropboxManager(this),
                     new DajoEnvironment(this),
-                    new DajoKeyStore(this),
+                    //new DajoKeyStore(this),
                     //new DajoLocale(this),
                     new DajoLocationManager(this),
+                    new DajoMediaSessionManager(this),
                     new DajoPackageManager(this),
                     new DajoSecureSettings(this),
                     new DajoStorageManager(this),
                     //new DajoSystemProperties(this),
-                    new DajoSystemSettings(this),
+                    //new DajoSystemSettings(this),
                     new DajoTelecomManager(this),
                     new DajoUpdateManager(this),
-                    new DajoWifiManager(this),
-                    new DajoWindowManager(this),
+                    //new DajoWifiManager(this),
+                    //new DajoWindowManager(this),
+
+                    /*
+                    new DajoCarDrivingStateManager(this),
+                    new DajoCarNavigationStatusManager(this),
+                    new DajoCarUserManager(this),
+                    new DajoCarUxRestrictionManager(this),
+                    new DajoCarPropertyManager(this),
+                     */
             };
             for (AbstractManager manager : managers) {
-                Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
+                Log.e(TAG, "=== Service: " + manager.getClass().getSimpleName() + " ===");
                 try {
                     manager.orchestrate();
                 }
@@ -94,18 +99,7 @@ public class MyService extends MyServiceLifecycle {
         catch(Exception e) {
             Log.e(TAG, "exception", e);
         }
-
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    private void mediaSession() {
-        MediaSessionManager sessionManager = (MediaSessionManager)getSystemService(Context.MEDIA_SESSION_SERVICE);
-        List<MediaController> list = sessionManager.getActiveSessions(null);
-        for(MediaController l : list) {
-            Log.e(TAG, "" + l);
-            Bundle b = l.getExtras();
-            String devicename = (String)b.get("DEVIC_NAME");
-        }
     }
 
     @Override

@@ -21,6 +21,7 @@ public class MyPermissions {
             Manifest.permission.SYSTEM_ALERT_WINDOW,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             //Manifest.permission.WRITE_SETTINGS,
+            Manifest.permission.BIND_ACCESSIBILITY_SERVICE,
     };
 
     private Activity activity;

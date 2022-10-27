@@ -16,7 +16,7 @@ public class DajoCarDrivingStateManager extends AbstractManager {
         super(ctx, permissions);
 
         Car car = Car.createCar(ctx);
-         manager = (CarDrivingStateManager)car.getCarManager(Car.CAR_DRIVING_STATE_SERVICE);
+        manager = (CarDrivingStateManager)car.getCarManager(Car.CAR_DRIVING_STATE_SERVICE);
     }
 
     @SuppressLint("MissingPermission")

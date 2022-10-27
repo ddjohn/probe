@@ -8,6 +8,7 @@ import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 
 import com.avelon.probe.areas.AbstractManager;
 import com.avelon.probe.areas.unlabeled.DajoAlertDialog;
@@ -31,8 +32,6 @@ public class MainActivity extends MyActivityLifecycle {
         setContentView(R.layout.activity_main);
 
 
-
-
         //if(1==1)
         //    return;
 
@@ -41,13 +40,14 @@ public class MainActivity extends MyActivityLifecycle {
         permissions.request();
         if(permissions.check() == false) {
             Log.e(TAG, "Missing permission - skipping!");
-            return;
+            //return;
         }
 
         // Receivers
         MyReceiver receiver = new MyReceiver(this);
 
         // Starting Services
+        startService(new Intent(this, MyAccessibilityService.class));
         startService(new Intent(this, MyService.class));
 
         mediaBrowser = new MediaBrowser(this,
@@ -82,8 +82,13 @@ public class MainActivity extends MyActivityLifecycle {
                     projection = new DajoProjectionManager(this),
             };
             for (AbstractManager manager : managers) {
-                Log.e(TAG, "=== " + manager.getClass().getSimpleName() + " ===");
-                //manager.orchestrate();
+                Log.e(TAG, "=== Activity: " + manager.getClass().getSimpleName() + " ===");
+                try {
+                    manager.orchestrate();
+                }
+                catch(Exception e) {
+                    Log.e(TAG, "exception", e);
+                }
             }
         }
         catch(Exception e) {
