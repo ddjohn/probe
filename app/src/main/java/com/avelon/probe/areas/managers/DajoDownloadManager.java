@@ -23,24 +23,16 @@ public class DajoDownloadManager extends AbstractManager {
 
     @Override
     public void orchestrate() throws Exception {
-        //request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-        //request.setAllowedOverRoaming(false);
-        //request.allowScanningByMediaScanner();
-        //request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "habba.jpg");
-        //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_ALARMS, "habba.jpg");
-        //request.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Downloads" + File.separator + "a.jpg")));
-
-        //Log.e(TAG, "request=" + request.toString());
-
+        /* Add to Download queue */
         String url = "https://www.sygic.com/assets/enterprise/img/Sygic_logo.svg";
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle("Title");
         request.setDescription("Description");
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
         request.setDestinationInExternalFilesDir(ctx, Environment.DIRECTORY_MOVIES, "Sygic_logo.svg");
         manager.enqueue(request);
 
+        /* Query queue */
         DownloadManager.Query query = new DownloadManager.Query();
         Cursor cursor = manager.query(query);
         Log.e(TAG, "count=" + cursor.getCount());
@@ -59,7 +51,16 @@ public class DajoDownloadManager extends AbstractManager {
                 cursor.getColumnIndex(DownloadManager.COLUMN_URI),
 
         };
-        String s2 = "";
+
+        //for(int i = 0; i < )
+        cursor.moveToFirst();
+       // cursor.
+        while(cursor.moveToNext()) {
+            int i = cursor.getColumnIndex(DownloadManager.COLUMN_ID);
+            Log.i(TAG, "name=" + cursor.getColumnName(i));
+        }
+
+        String s2 = "==> ";
         for(int c : columns) {
             s2 += "," + cursor.getColumnName(c);
         }
@@ -73,6 +74,17 @@ public class DajoDownloadManager extends AbstractManager {
             Log.i(TAG, "name=" + s);
         }
         cursor.close();
+
+
+
+        //request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        //request.setAllowedOverRoaming(false);
+        //request.allowScanningByMediaScanner();
+        //request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, "habba.jpg");
+        //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_ALARMS, "habba.jpg");
+        //request.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Downloads" + File.separator + "a.jpg")));
+
+        //Log.e(TAG, "request=" + request.toString());
 
 //        String filename = URLUtil.guessFileName(url,null, MimeTypeMap.getFileExtensionFromUrl(url));
 
@@ -97,7 +109,7 @@ public class DajoDownloadManager extends AbstractManager {
 
 
 */
-
+/*
         File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/");
         for(File file : f.listFiles()) {
             Log.e(TAG, "file=" + file);
@@ -107,7 +119,7 @@ public class DajoDownloadManager extends AbstractManager {
                 }
             }
         };
-
+*/
         Log.e(TAG, "----------------");
 /*
         File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies");

@@ -45,7 +45,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class MyService extends MyServiceLifecycle {
-    private static final String TAG = MyService.class.getCanonicalName();
+    private static final String TAG = MyService.class.getSimpleName();
 
     private static Class classes[] = new Class[] {
             DajoAccountManager.class, 

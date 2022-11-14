@@ -17,7 +17,7 @@ import com.avelon.probe.areas.managers.DajoProjectionManager;
 import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
 
 public class MainActivity extends MyActivityLifecycle {
-    private static final String TAG = MainActivity.class.getCanonicalName();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private MyPermissions permissions;
     private DajoProjectionManager projection;
@@ -31,10 +31,6 @@ public class MainActivity extends MyActivityLifecycle {
 
         setContentView(R.layout.activity_main);
 
-
-        //if(1==1)
-        //    return;
-
         // Checking Permissions
         permissions = new MyPermissions(this);
         permissions.request();
@@ -42,6 +38,9 @@ public class MainActivity extends MyActivityLifecycle {
             Log.e(TAG, "Missing permission - skipping!");
             //return;
         }
+
+        if(1==1)
+            return;
 
         // Receivers
         MyReceiver receiver = new MyReceiver(this);

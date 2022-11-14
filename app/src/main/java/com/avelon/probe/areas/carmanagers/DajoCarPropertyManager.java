@@ -37,7 +37,6 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
             manager.registerCallback(this, property.getPropertyId(), CarPropertyManager.SENSOR_RATE_ONCHANGE);
             manager.registerCallback(this, property.getPropertyId(), CarPropertyManager.SENSOR_RATE_NORMAL);
         });
-
     }
 
     @SuppressLint("MissingPermission")
@@ -49,7 +48,7 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
         Log.e(TAG, "" + manager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
 
         manager.getPropertyList().forEach(property -> Log.e(TAG, "property=" + property));
-
+/*
         Thread t = new Thread(() -> {
             while(true) {
                 b = (b == false ? true : false);
@@ -63,7 +62,7 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
             }
         });
         t.start();
-
+*/
         manager.setProperty(Integer.class, VehiclePropertyIds.HVAC_TEMPERATURE_DISPLAY_UNITS, VehicleAreaType.VEHICLE_AREA_TYPE_GLOBAL, 1);
         manager.setProperty(Integer.class, VehiclePropertyIds.HVAC_TEMPERATURE_DISPLAY_UNITS, VehicleAreaType.VEHICLE_AREA_TYPE_GLOBAL, 0);
     }
