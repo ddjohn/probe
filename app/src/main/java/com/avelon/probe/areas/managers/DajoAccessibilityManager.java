@@ -26,11 +26,18 @@ public class DajoAccessibilityManager extends AbstractManager implements Accessi
     @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
+        Log.e(TAG, "orchestrate()");
         manager.getEnabledAccessibilityServiceList(AccessibilityManager.FLAG_CONTENT_TEXT).forEach(service -> {
             Log.e(TAG, "service=" + service);
         });
         manager.getInstalledAccessibilityServiceList().forEach(instance -> {
             Log.e(TAG, "instance=" + instance);
+        });
+        manager.addTouchExplorationStateChangeListener(touch -> {
+            Log.e(TAG, "touch=" + touch);
+        });
+        manager.addAccessibilityStateChangeListener(status -> {
+            Log.e(TAG, "´state=" + status);
         });
     }
 

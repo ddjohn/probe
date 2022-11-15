@@ -37,6 +37,10 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
             manager.registerCallback(this, property.getPropertyId(), CarPropertyManager.SENSOR_RATE_ONCHANGE);
             manager.registerCallback(this, property.getPropertyId(), CarPropertyManager.SENSOR_RATE_NORMAL);
         });
+        manager.registerCallback(this, 557969417, CarPropertyManager.SENSOR_RATE_ONCHANGE);
+        manager.registerCallback(this, 557969417, CarPropertyManager.SENSOR_RATE_ONCHANGE);
+        manager.registerCallback(this, 0x2141F009, CarPropertyManager.SENSOR_RATE_NORMAL);
+        manager.registerCallback(this, 0x2141F009, CarPropertyManager.SENSOR_RATE_NORMAL);
     }
 
     @SuppressLint("MissingPermission")

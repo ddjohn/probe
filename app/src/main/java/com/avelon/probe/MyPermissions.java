@@ -2,6 +2,7 @@ package com.avelon.probe;
 
 import android.Manifest;
 import android.app.Activity;
+import android.car.Car;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class MyPermissions {
             Manifest.permission.SYSTEM_ALERT_WINDOW,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             //Manifest.permission.WRITE_SETTINGS,
+            Car.PERMISSION_VENDOR_EXTENSION,
     };
 
     private Activity activity;

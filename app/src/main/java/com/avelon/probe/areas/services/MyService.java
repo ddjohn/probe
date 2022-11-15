@@ -1,14 +1,10 @@
-package com.avelon.probe;
+package com.avelon.probe.areas.services;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.FeatureInfo;
-import android.media.session.MediaController;
-import android.media.session.MediaSessionManager;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import com.avelon.probe.areas.AbstractManager;
+
 import com.avelon.probe.areas.managers.DajoMediaSessionManager;
 import com.avelon.probe.areas.unlabeled.DajoContentResolver;
 import com.avelon.probe.areas.carmanagers.DajoCarDrivingStateManager;
@@ -42,7 +38,6 @@ import com.avelon.probe.areas.managers.DajoWindowManager;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.List;
 
 public class MyService extends MyServiceLifecycle {
     private static final String TAG = MyService.class.getSimpleName();

@@ -2,13 +2,11 @@ package com.avelon.probe.areas.managers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Bundle;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.util.Log;
 
-import com.avelon.probe.MyService;
 import com.avelon.probe.areas.AbstractManager;
 
 import java.util.Iterator;

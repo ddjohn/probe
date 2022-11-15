@@ -2,15 +2,17 @@ package com.avelon.probe;
 
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 
 import com.avelon.probe.areas.AbstractManager;
+import com.avelon.probe.areas.managers.DajoAccessibilityManager;
+import com.avelon.probe.areas.services.MyAccessibilityService;
+import com.avelon.probe.areas.services.MyMediaService;
+import com.avelon.probe.areas.services.MyService;
 import com.avelon.probe.areas.unlabeled.DajoAlertDialog;
 import com.avelon.probe.areas.unlabeled.DajoTextToSpeech;
 import com.avelon.probe.areas.managers.DajoProjectionManager;
@@ -39,8 +41,12 @@ public class MainActivity extends MyActivityLifecycle {
             //return;
         }
 
-        if(1==1)
-            return;
+        try {
+            DajoAccessibilityManager mgr = new DajoAccessibilityManager(this);
+            mgr.orchestrate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Receivers
         MyReceiver receiver = new MyReceiver(this);
@@ -48,6 +54,9 @@ public class MainActivity extends MyActivityLifecycle {
         // Starting Services
         startService(new Intent(this, MyAccessibilityService.class));
         startService(new Intent(this, MyService.class));
+
+        if(1==1)
+            return;
 
         mediaBrowser = new MediaBrowser(this,
                 new ComponentName(this, MyMediaService.class),
