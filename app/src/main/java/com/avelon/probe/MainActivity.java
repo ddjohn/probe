@@ -7,6 +7,9 @@ import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.avelon.probe.areas.AbstractManager;
 import com.avelon.probe.areas.managers.DajoAccessibilityManager;
@@ -32,6 +35,18 @@ public class MainActivity extends MyActivityLifecycle {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        Button crashButton = new Button(this);
+        crashButton.setText("Test Crash");
+        crashButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                throw new RuntimeException("Test Crash"); // Force a crash
+            }
+        });
+
+        addContentView(crashButton, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
 
         // Checking Permissions
         permissions = new MyPermissions(this);

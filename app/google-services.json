@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "706807376007",
+    "project_id": "analytics-c6d27",
+    "storage_bucket": "analytics-c6d27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706807376007:android:cabc9e061949951c293022",
+        "android_client_info": {
+          "package_name": "com.avelon.probe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706807376007-e5ucb6f8slgqv8255gqr8vf8hjfb3qcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr3vObjHhXgyENuz-OgAcrTt5gg1xXb0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706807376007-e5ucb6f8slgqv8255gqr8vf8hjfb3qcu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
