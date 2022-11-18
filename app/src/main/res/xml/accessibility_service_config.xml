@@ -1,9 +1,26 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:packageNames="com.avelon.probe"
+    android:accessibilityEventTypes="typeAllMask"
+    android:accessibilityFeedbackType="feedbackAllMask"
+    android:accessibilityFlags="flagDefault"
+    android:canRequestEnhancedWebAccessibility="true"
+    android:notificationTimeout="100"
+    android:packageNames="@null"
+    android:canRetrieveWindowContent="true"
+    android:canRequestTouchExplorationMode="true"
+/>
+    <!--
+       android:accessibilityEventTypes="typeViewClicked|typeViewFocused"
+       android:packageNames="com.example.android.myFirstApp, com.example.android.mySecondApp"
+       android:accessibilityFeedbackType="feedbackSpoken"
+       android:notificationTimeout="100"
+       android:settingsActivity="com.example.android.apis.accessibility.TestBackActivity"
+       android:canRetrieveWindowContent="true"
+
+           android:packageNames="com.avelon.probe"
     android:accessibilityEventTypes="typeAllMask"
     android:accessibilityFlags="flagDefault"
-    android:accessibilityFeedbackType="feedbackSpoken"
+    android:accessibilityFeedbackType="feedbackAllMask"
     android:notificationTimeout="100"
     android:canRetrieveWindowContent="true"
-    android:settingsActivity="com.example.android.accessibility.ServiceSettingsActivity"
-/>
+    android:settingsActivity="com.avelon.probe.MainActivity"
+       -->

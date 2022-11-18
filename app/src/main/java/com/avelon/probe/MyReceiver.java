@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.lang.reflect.Field;
 
 public class MyReceiver extends BroadcastReceiver {
-    private static final String TAG = MyReceiver.class.getCanonicalName();
+    private static final String TAG = MyReceiver.class.getSimpleName();
 
     public MyReceiver(Context ctx) {
         for(Field field : Intent.class.getDeclaredFields()) {
@@ -31,7 +31,7 @@ public class MyReceiver extends BroadcastReceiver {
         sb.append("Action: " + intent.getAction() + "\n");
         sb.append("URI: " + intent.toUri(Intent.URI_INTENT_SCHEME).toString() + "\n");
         String log = sb.toString();
-        Log.d(TAG, log);
+        Log.e(TAG, log);
         Toast.makeText(context, log, Toast.LENGTH_LONG).show();
     }
 }

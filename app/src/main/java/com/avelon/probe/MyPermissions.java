@@ -23,7 +23,9 @@ public class MyPermissions {
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.SYSTEM_ALERT_WINDOW,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            //Manifest.permission.WRITE_SETTINGS,
+            Manifest.permission.WRITE_SETTINGS,
+
+            Car.PERMISSION_SPEED,
             Car.PERMISSION_VENDOR_EXTENSION,
     };
 

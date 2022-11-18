@@ -6,6 +6,7 @@ import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ public class MainActivity extends MyActivityLifecycle {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         Button crashButton = new Button(this);
@@ -43,7 +43,6 @@ public class MainActivity extends MyActivityLifecycle {
                 throw new RuntimeException("Test Crash"); // Force a crash
             }
         });
-
         addContentView(crashButton, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -56,18 +55,13 @@ public class MainActivity extends MyActivityLifecycle {
             //return;
         }
 
-        try {
-            DajoAccessibilityManager mgr = new DajoAccessibilityManager(this);
-            mgr.orchestrate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        startActivityForResult(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS),828);
 
         // Receivers
         MyReceiver receiver = new MyReceiver(this);
 
         // Starting Services
-        startService(new Intent(this, MyAccessibilityService.class));
+        //startService(new Intent(this, MyAccessibilityService.class));
         startService(new Intent(this, MyService.class));
 
         if(1==1)
@@ -147,6 +141,7 @@ public class MainActivity extends MyActivityLifecycle {
             }
             default: {
                 Log.e(TAG, "Unknown request code: " + requestCode);
+                Log.e(TAG, "Unknown request data: " + data);
             }
         }
     }
