@@ -11,7 +11,7 @@ public class DajoSecureSettings extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoSecureSettings(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoSecureSettings.class, ctx, permissions);
 
         //manager = (TemplateManager) ctx.getSystemService(Context.TEMPLATE_SERVICE);
     }

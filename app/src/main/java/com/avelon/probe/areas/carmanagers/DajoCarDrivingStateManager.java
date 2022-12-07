@@ -15,7 +15,7 @@ public class DajoCarDrivingStateManager extends AbstractManager implements CarDr
     public static String[] permissions = new String[] {};
 
     public DajoCarDrivingStateManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoCarDrivingStateManager.class, ctx, permissions);
 
         this.checkFeature(PackageManager.FEATURE_AUTOMOTIVE);
 
@@ -36,7 +36,7 @@ public class DajoCarDrivingStateManager extends AbstractManager implements CarDr
             Log.e(TAG, "_content" + carDrivingStateEvent.describeContents());
             Log.e(TAG, "_string" + carDrivingStateEvent.toString());
         });
-        Log.e(TAG, "driving state=" + manager.getCurrentCarDrivingState());
+        Log.i(TAG, "driving state=" + manager.getCurrentCarDrivingState());
     }
 
     @Override

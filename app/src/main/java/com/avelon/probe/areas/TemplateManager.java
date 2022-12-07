@@ -8,7 +8,7 @@ public class TemplateManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public TemplateManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(TemplateManager.class, ctx, permissions);
 
         /* Manager */
         //manager = (TemplateManager) ctx.getSystemService(Context.TEMPLATE_SERVICE);

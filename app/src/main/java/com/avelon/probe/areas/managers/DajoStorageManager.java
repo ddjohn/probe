@@ -12,7 +12,7 @@ public class DajoStorageManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoStorageManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoStorageManager.class, ctx, permissions);
 
         manager = (StorageManager)ctx.getSystemService(Context.STORAGE_SERVICE);
     }

@@ -16,7 +16,7 @@ public class DajoTelecomManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoTelecomManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoTelecomManager.class, ctx, permissions);
 
         manager = (TelecomManager)ctx.getSystemService(Context.TELECOM_SERVICE);
     }

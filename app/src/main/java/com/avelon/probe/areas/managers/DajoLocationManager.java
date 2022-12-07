@@ -18,7 +18,7 @@ public class DajoLocationManager extends AbstractManager implements OnNmeaMessag
 
     @SuppressLint("MissingPermission")
     public DajoLocationManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoLocationManager.class, ctx, permissions);
 
         this.checkFeature(PackageManager.FEATURE_LOCATION_GPS);
 

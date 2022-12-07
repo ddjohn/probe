@@ -13,7 +13,7 @@ public class DajoConnectivityManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoConnectivityManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoConnectivityManager.class, ctx, permissions);
 
         manager = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
     }

@@ -13,7 +13,7 @@ public class DajoAudioManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoAudioManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoAudioManager.class, ctx, permissions);
 
         manager = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
     }

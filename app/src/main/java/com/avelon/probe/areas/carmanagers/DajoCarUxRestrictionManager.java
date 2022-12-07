@@ -15,7 +15,7 @@ public class DajoCarUxRestrictionManager extends AbstractManager implements CarU
     public static String[] permissions = new String[] {};
 
     public DajoCarUxRestrictionManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoCarUxRestrictionManager.class, ctx, permissions);
 
         this.checkFeature(PackageManager.FEATURE_AUTOMOTIVE);
 
@@ -57,7 +57,7 @@ public class DajoCarUxRestrictionManager extends AbstractManager implements CarU
             }
         });
 
-        Log.e(TAG, "current=" + manager.getCurrentCarUxRestrictions());
+        Log.i(TAG, "current=" + manager.getCurrentCarUxRestrictions());
     }
 
     public String toBinaryString(int number, int groupSize) {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-    android:sharedUserId="android.uid.system"
+        android:sharedUserId="android.uid.system"
     -->
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -53,6 +53,7 @@
 
     <uses-permission android:name="android.car.permission.ACCESS_CAR_PROJECTION_STATUS"/>
     <uses-permission android:name="android.car.permission.CAR_CAMERA"/>
+    <uses-permission android:name="android.car.permission.CAR_ENERGY"/>
     <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_VOLUME"/>
     <uses-permission android:name="android.car.permission.CAR_DIAGNOSTICS"/>
@@ -89,7 +90,7 @@
     <uses-permission android:name="android.car.permission.PERMISSION_CAR_ENGINE_DETAILED" />
     <uses-permission android:name="android.car.permission.PERMISSION_CONTROL_ENERGY_PORTS" />
     <uses-permission android:name="android.car.permission.READ_CAR_DISPLAY_UNITS" />
-    <uses-permission android:name="android.car.permission.READ_CAR_STEERING"/>
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.car.permission.SET_CAR_VENDOR_CATEGORY_INFO"/>
     <uses-permission android:name="android.car.permission.STORAGE_MONITORING"/>
     <uses-permission android:name="android.car.permission.VMS_PUBLISHER"/>

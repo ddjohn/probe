@@ -19,7 +19,7 @@ public class DajoTextToSpeech extends AbstractManager {
     private TextToSpeech tts;
 
     public DajoTextToSpeech(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoTextToSpeech.class, ctx, permissions);
 
         this.ctx = ctx;
     }

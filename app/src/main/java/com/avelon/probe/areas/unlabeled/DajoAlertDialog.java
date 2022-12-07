@@ -8,12 +8,11 @@ import android.view.WindowManager;
 import com.avelon.probe.areas.AbstractManager;
 
 public class DajoAlertDialog extends AbstractManager {
-    //private TemplateManager manager;
     public static String[] permissions = new String[] {};
     private AlertDialog dialog;
 
     public DajoAlertDialog(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoAlertDialog.class, ctx, permissions);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setMessage(ctx.getClass().getSimpleName())
@@ -27,6 +26,6 @@ public class DajoAlertDialog extends AbstractManager {
 
     @Override
     public void orchestrate() throws Exception {
-        //dialog.show();
+        // DAJO dialog.show();
     }
 }

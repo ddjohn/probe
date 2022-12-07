@@ -15,7 +15,7 @@ public class DajoCarUserManager extends AbstractManager implements CarUserManage
 
     @SuppressLint("MissingPermission")
     public DajoCarUserManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoCarUserManager.class, ctx, permissions);
 
         this.checkFeature(PackageManager.FEATURE_AUTOMOTIVE);
 

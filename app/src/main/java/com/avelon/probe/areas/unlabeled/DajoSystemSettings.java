@@ -13,7 +13,7 @@ public class DajoSystemSettings extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoSystemSettings(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoSystemSettings.class, ctx, permissions);
 
         //manager = (TemplateManager) ctx.getSystemService(Context.TEMPLATE_SERVICE);
     }

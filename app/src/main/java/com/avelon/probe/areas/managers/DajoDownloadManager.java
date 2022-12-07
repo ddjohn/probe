@@ -16,7 +16,7 @@ public class DajoDownloadManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoDownloadManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoDownloadManager.class, ctx, permissions);
 
         manager = (DownloadManager) ctx.getSystemService(Context.DOWNLOAD_SERVICE);
     }
@@ -35,7 +35,7 @@ public class DajoDownloadManager extends AbstractManager {
         /* Query queue */
         DownloadManager.Query query = new DownloadManager.Query();
         Cursor cursor = manager.query(query);
-        Log.e(TAG, "count=" + cursor.getCount());
+        Log.i(TAG, "count=" + cursor.getCount());
         int columns[] = {
                 cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR),
                 cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION),
@@ -120,7 +120,7 @@ public class DajoDownloadManager extends AbstractManager {
             }
         };
 */
-        Log.e(TAG, "----------------");
+        Log.i(TAG, "----------------");
 /*
         File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/Movies");
         Log.e(TAG, "dir=" + f.isDirectory());

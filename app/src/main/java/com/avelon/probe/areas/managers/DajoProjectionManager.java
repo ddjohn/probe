@@ -22,7 +22,7 @@ public class DajoProjectionManager extends AbstractManager {
     private Context ctx;
 
     public DajoProjectionManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoProjectionManager.class, ctx, permissions);
 
         manager = (MediaProjectionManager)ctx.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         this.ctx = ctx;

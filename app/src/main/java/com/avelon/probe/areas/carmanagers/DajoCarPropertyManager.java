@@ -23,7 +23,7 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
     boolean b = false;
 
     public DajoCarPropertyManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoCarPropertyManager.class, ctx, permissions);
 
         this.checkFeature(PackageManager.FEATURE_AUTOMOTIVE);
 
@@ -46,12 +46,12 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
     @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
-        Log.e(TAG, "" + manager.getProperty(VehiclePropertyIds.INFO_MAKE, 0));
-        Log.e(TAG, "" + manager.getProperty(VehiclePropertyIds.NIGHT_MODE, 0));
-        Log.e(TAG, "" + manager.getProperty(VehiclePropertyIds.PERF_VEHICLE_SPEED, 0));
-        Log.e(TAG, "" + manager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
+        Log.i(TAG, "" + manager.getProperty(VehiclePropertyIds.INFO_MAKE, 0));
+        Log.i(TAG, "" + manager.getProperty(VehiclePropertyIds.NIGHT_MODE, 0));
+        Log.i(TAG, "" + manager.getProperty(VehiclePropertyIds.PERF_VEHICLE_SPEED, 0));
+        Log.i(TAG, "" + manager.getProperty(VehiclePropertyIds.RANGE_REMAINING, 0));
 
-        manager.getPropertyList().forEach(property -> Log.e(TAG, "property=" + property));
+        manager.getPropertyList().forEach(property -> Log.i(TAG, "property=" + property));
 /*
         Thread t = new Thread(() -> {
             while(true) {
@@ -73,11 +73,11 @@ public class DajoCarPropertyManager extends AbstractManager implements CarProper
 
     @Override
     public void onChangeEvent(CarPropertyValue carPropertyValue) {
-        Log.e(TAG, "cb:onChangeEvent(): " + carPropertyValue);
+        Log.i(TAG, "cb:onChangeEvent(): " + carPropertyValue);
     }
 
     @Override
     public void onErrorEvent(int i, int i1) {
-        Log.e(TAG, "cb:onErrorEvent(): " + i + i1);
+        Log.i(TAG, "cb:onErrorEvent(): " + i + i1);
     }
 }

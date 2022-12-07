@@ -21,7 +21,7 @@ public class DajoPackageManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoPackageManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoPackageManager.class, ctx, permissions);
 
         manager = ctx.getPackageManager();
     }
@@ -50,12 +50,12 @@ public class DajoPackageManager extends AbstractManager {
         }
 
         for(ApplicationInfo application : manager.getInstalledApplications(0)) {
-            Log.e(TAG, "application: " + application);
+            Log.i(TAG, "application: " + application);
             if (manager.getLaunchIntentForPackage(application.packageName) != null) {
-                Log.e(TAG, "action: " + manager.getLaunchIntentForPackage(application.packageName).getAction());
-                Log.e(TAG, "type: " + manager.getLaunchIntentForPackage(application.packageName).getType());
-                Log.e(TAG, "identifier: " + manager.getLaunchIntentForPackage(application.packageName).getIdentifier());
-                Log.e(TAG, "schema: " + manager.getLaunchIntentForPackage(application.packageName).getScheme());
+                Log.i(TAG, "action: " + manager.getLaunchIntentForPackage(application.packageName).getAction());
+                Log.i(TAG, "type: " + manager.getLaunchIntentForPackage(application.packageName).getType());
+                Log.i(TAG, "identifier: " + manager.getLaunchIntentForPackage(application.packageName).getIdentifier());
+                Log.i(TAG, "schema: " + manager.getLaunchIntentForPackage(application.packageName).getScheme());
             }
         }
 
@@ -78,38 +78,38 @@ public class DajoPackageManager extends AbstractManager {
 
             ResolveInfo resolve = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
             if(resolve != null)
-                Log.e(TAG, "---> " + action + ":" + (resolve == null ? resolve : resolve.activityInfo.name));
+                Log.i(TAG, "---> " + action + ":" + (resolve == null ? resolve : resolve.activityInfo.name));
         }
 
         {
             Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND, null);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             ResolveInfo resolve = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            Log.e(TAG, "---> ACTION_VOICE_COMMAND: " + (resolve == null ? resolve : resolve.activityInfo.name));
+            Log.i(TAG, "---> ACTION_VOICE_COMMAND: " + (resolve == null ? resolve : resolve.activityInfo.name));
         }
         {
             Intent intent = new Intent(Intent.ACTION_ASSIST, null);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             ResolveInfo resolve = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            Log.e(TAG, "---> ACTION_ASSIST: " + (resolve == null ? resolve : resolve.activityInfo.name));
+            Log.i(TAG, "---> ACTION_ASSIST: " + (resolve == null ? resolve : resolve.activityInfo.name));
         }
         {
             Intent intent = new Intent(Intent.ACTION_DIAL, null);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             ResolveInfo info = manager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            Log.e(TAG, "www: " + (info == null ? "" + info : info.activityInfo.name));
+            Log.i(TAG, "www: " + (info == null ? "" + info : info.activityInfo.name));
         }
         {
             Intent intent = new Intent(Intent.ACTION_ASSIST, null);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             ResolveInfo info = manager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            Log.e(TAG, "assistant: " + (info == null ? "" + info : info.activityInfo.name));
+            Log.i(TAG, "assistant: " + (info == null ? "" + info : info.activityInfo.name));
         }
         {
             Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND, null);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             ResolveInfo info = manager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            Log.e(TAG, "voice: " + (info == null ? "" + info : info.activityInfo.name));
+            Log.i(TAG, "voice: " + (info == null ? "" + info : info.activityInfo.name));
         }
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
@@ -120,11 +120,11 @@ public class DajoPackageManager extends AbstractManager {
         List<ComponentName> activities = new ArrayList<>();
         manager.getPreferredActivities(filters, activities, null);
         for (ComponentName activity : activities) {
-            Log.d(TAG, "======packet default:===" + activity.getPackageName());
+            Log.i(TAG, "======packet default:===" + activity.getPackageName());
         }
 
         for(FeatureInfo feature : manager.getSystemAvailableFeatures()) {
-            Log.e(TAG, " feature: " + feature);
+            Log.i(TAG, " feature: " + feature);
         }
     }
 }

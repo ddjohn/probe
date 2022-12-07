@@ -12,14 +12,14 @@ public class DajoSystemProperties extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoSystemProperties(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoSystemProperties.class, ctx, permissions);
 
         //manager = (TemplateManager) ctx.getSystemService(Context.TEMPLATE_SERVICE);
     }
 
     @Override
     public void orchestrate() throws Exception {
-       Log.e(TAG, "" + SystemProperties.get("ro.build.user"));
-       Log.e(TAG, "" + SystemProperties.get("ro.vendor.aptiv.hw.usb.bus1_path"));
+       Log.i(TAG, "" + SystemProperties.get("ro.build.user"));
+       Log.i(TAG, "" + SystemProperties.get("ro.vendor.aptiv.hw.usb.bus1_path"));
     }
 }

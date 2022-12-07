@@ -12,7 +12,7 @@ public class DajoAlarmManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoAlarmManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoAlarmManager.class, ctx, permissions);
 
         manager = (AlarmManager)ctx.getSystemService(Context.ALARM_SERVICE);
     }

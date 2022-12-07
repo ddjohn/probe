@@ -11,7 +11,7 @@ public class DajoBuild extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoBuild(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoBuild.class, ctx, permissions);
     }
 
     @Override

@@ -24,7 +24,12 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.KeySpec;
 import java.util.Enumeration;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 public class DajoKeyStore extends AbstractManager {
     private KeyStore keyStore;
@@ -32,13 +37,14 @@ public class DajoKeyStore extends AbstractManager {
     private static final String KEYSTORE = "AndroidKeyStore";
 
     public DajoKeyStore(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoKeyStore.class, ctx, permissions);
 
         keyStore = KeyStore.getInstance(KEYSTORE);
         keyStore.load(null);
         Log.i(TAG, "keystore= "  + keyStore);
         Log.i(TAG, "provider=" + keyStore.getProvider());
         Log.i(TAG, "provider=" + keyStore.getType());
+
         // Create keystore
         {
             Log.i(TAG, "default=" + KeyStore.getDefaultType());
@@ -74,9 +80,23 @@ public class DajoKeyStore extends AbstractManager {
 
     @Override
     public void orchestrate() throws Exception {
-       while(keyStore.aliases().hasMoreElements()) {
+        Log.i(TAG, "===========================");
+        while(keyStore.aliases().hasMoreElements()) {
            //Log.e(TAG, "alias=" + keyStore.aliases().nextElement());
-       }
+        }
+
+        /* Plain text */
+        SecretKeyFactory fry = SecretKeyFactory.getInstance("AES");
+        KeySpec spec = new PBEKeySpec("somekey".toCharArray());
+        SecretKey key = fry.generateSecret(spec);
+        KeyStore.Entry entry = new KeyStore.SecretKeyEntry(key);
+        KeyStore.ProtectionParameter protection = new KeyStore.PasswordProtection("password".toCharArray());
+        keyStore.setEntry("plaintext", entry, protection);
+
+        Log.i(TAG, "KEY=" + entry);
+
+
+
 
         KeyPairGenerator generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, KEYSTORE);
         generator.initialize(new KeyGenParameterSpec.Builder("alias", KeyProperties.PURPOSE_ENCRYPT)
@@ -141,5 +161,9 @@ public class DajoKeyStore extends AbstractManager {
         //store.importKey("root", new byte[] {0, 0, 22});
         //store.importKey("root", new byte[] {0, 0, 22});
         //store.importKey("root", new byte[] {0, 0, 22});
+
+
+
+
     }
 }

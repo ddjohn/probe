@@ -12,7 +12,7 @@ public class DajoActivityManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoActivityManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoActivityManager.class, ctx, permissions);
 
         manager = (ActivityManager)ctx.getSystemService(Context.ACTIVITY_SERVICE);
     }

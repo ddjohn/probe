@@ -16,7 +16,7 @@ public class DajoBluetoothManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoBluetoothManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoBluetoothManager.class, ctx, permissions);
 
         checkFeature(PackageManager.FEATURE_BLUETOOTH);
 

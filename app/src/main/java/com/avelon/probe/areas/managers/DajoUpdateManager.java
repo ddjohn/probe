@@ -10,7 +10,7 @@ public class DajoUpdateManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoUpdateManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoUpdateManager.class, ctx, permissions);
 
        // manager = new UpdateEngine();
     }

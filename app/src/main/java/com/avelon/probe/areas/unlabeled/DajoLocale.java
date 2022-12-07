@@ -16,7 +16,7 @@ public class DajoLocale extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoLocale(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoLocale.class, ctx, permissions);
     }
 
     @SuppressLint("MissingPermission")

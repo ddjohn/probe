@@ -12,7 +12,7 @@ public class DajoWifiManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoWifiManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoWifiManager.class, ctx, permissions);
 
         manager = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
     }

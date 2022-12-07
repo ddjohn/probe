@@ -17,7 +17,7 @@ public class DajoContentResolver extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoContentResolver(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoContentResolver.class, ctx, permissions);
 
         /* Manager */
         resolver = ctx.getContentResolver();
@@ -34,15 +34,15 @@ public class DajoContentResolver extends AbstractManager {
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
                 final String setting = Settings.Secure.getString(ctx.getContentResolver(), "assistant");
-                Log.e(TAG, "settings=" + setting);            }
+                Log.i(TAG, "settings=" + setting);            }
         });
 
         //final String setting = Settings.Secure.getStringForUser(this.getContentResolver(), "assistant" Settings.Secure.ASSISTANT, 10);
         final String setting = Settings.Secure.getString(resolver, "assistant" /*Settings.Secure.ASSISTANT*/);
-        Log.e(TAG, "settings=" + setting);
+        Log.i(TAG, "settings=" + setting);
 
         com.android.internal.app.AssistUtils utils = new com.android.internal.app.AssistUtils(ctx);
         ComponentName name = utils.getAssistComponentForUser(10);
-        Log.e(TAG, "name: " + name);
+        Log.i(TAG, "name: " + name);
     }
 }

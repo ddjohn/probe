@@ -18,6 +18,15 @@ public abstract class AbstractManager {
             throw new Exception("Needed permissions not granted");
     }
 
+    public AbstractManager(Class clazz, Context ctx, String[] permissions) throws Exception {
+        this.ctx = ctx;
+
+        TAG = clazz.getSimpleName();
+
+        if(!neededPermissions(permissions))
+            throw new Exception("Needed permissions not granted");
+    }
+
     public abstract void orchestrate() throws Exception;
 
     protected void checkFeature(String feature) throws NoFeatureException {

@@ -14,12 +14,12 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 public class MyMediaService extends MediaBrowserService {
-    private static final String TAG = MyMediaService.class.getCanonicalName();
+    private static final String TAG = MyMediaService.class.getSimpleName();
 
     @Override
     public void onCreate() {
+        Log.e(TAG, "onCreate()");
         super.onCreate();
-        Log.e(TAG, "Creating MediaBroswerService");
 
         MediaSession mediaSession = new MediaSession(this, "TOKEN");
         mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);

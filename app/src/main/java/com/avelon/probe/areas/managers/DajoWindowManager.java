@@ -13,7 +13,7 @@ public class DajoWindowManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoWindowManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoWindowManager.class, ctx, permissions);
 
         manager = (WindowManager)ctx.getSystemService(Context.WINDOW_SERVICE);
     }

@@ -11,7 +11,7 @@ public class DajoEnvironment extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoEnvironment(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoEnvironment.class, ctx, permissions);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class DajoAccountManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoAccountManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoAccountManager.class, ctx, permissions);
 
         manager = (AccountManager)ctx.getSystemService(Context.ACCOUNT_SERVICE);
     }

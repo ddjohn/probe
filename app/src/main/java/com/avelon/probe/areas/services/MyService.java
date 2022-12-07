@@ -55,7 +55,7 @@ public class MyService extends MyServiceLifecycle {
             DajoDownloadManager.class,
             DajoDropboxManager.class,
             DajoEnvironment.class,
-            DajoKeyStore.class,
+            //DajoKeyStore.class,
             DajoLocale.class,
             DajoLocationManager.class,
             DajoMediaSessionManager.class,
@@ -85,6 +85,7 @@ public class MyService extends MyServiceLifecycle {
     public int onStartCommand(Intent intent, int flags, int startId) {
         for(Class clazz : classes) {
             try {
+                Log.e(TAG, "=== Service: " + clazz.getSimpleName() + " ===");
                 Constructor constructor = clazz.getConstructor(Context.class);
                 Object object = constructor.newInstance(this);
                 Method method = clazz.getMethod("orchestrate");

@@ -13,7 +13,7 @@ public class DajoCarNavigationStatusManager extends AbstractManager {
     public static String[] permissions = new String[] {};
 
     public DajoCarNavigationStatusManager(Context ctx) throws Exception {
-        super(ctx, permissions);
+        super(DajoCarNavigationStatusManager.class, ctx, permissions);
 
         this.checkFeature(PackageManager.FEATURE_AUTOMOTIVE);
 
