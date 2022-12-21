@@ -1,15 +1,28 @@
 package com.avelon.probe;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.MediaMetadata;
+import android.media.Session2Token;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
+import android.media.session.MediaSessionManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.telecom.TelecomManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.avelon.probe.areas.AbstractManager;
 import com.avelon.probe.areas.services.MyAccessibilityService;
@@ -20,6 +33,8 @@ import com.avelon.probe.areas.unlabeled.DajoTextToSpeech;
 import com.avelon.probe.areas.managers.DajoProjectionManager;
 import com.avelon.probe.areas.lifecycle.MyActivityLifecycle;
 
+import java.util.List;
+
 public class MainActivity extends MyActivityLifecycle {
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -27,12 +42,39 @@ public class MainActivity extends MyActivityLifecycle {
     private DajoProjectionManager projection;
     private DajoTextToSpeech tts;
 
+    private boolean test = false;
+
     MediaBrowser mediaBrowser = null;
 
+    @SuppressLint("Range")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
+        checkSelfPermission(Manifest.permission.READ_CONTACTS);
+
+        Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
+        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_VCARD_URI,null, null, null, null);
+        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_MULTI_VCARD_URI,null, null, null, null);
+        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_MULTI_VCARD_URI,null, null, null, null);
+        //Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null, null, null, null);
+/*
+        cursor.moveToFirst();
+        {
+            for(String column : cursor.getColumnNames()) {
+                //Log.e(TAG,"cursor: " + column + " - " + cursor.getString(cursor.getColumnIndex(column)));
+            }
+            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+            Log.e(TAG, "name: " + name);
+            Log.e(TAG, "phone: " + phoneNumber);
+        } while(cursor.moveToNext());
+        cursor.close();
+*/
+        TelecomManager telecom = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
+        TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 
         // Checking Permissions
         permissions = new MyPermissions(this);
@@ -42,13 +84,21 @@ public class MainActivity extends MyActivityLifecycle {
             //return;
         }
 
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        //startActivityForResult(intent, 9090);
+
+
         // Receivers
         MyReceiver receiver = new MyReceiver(this);
+
+        if(test) return;
 
         // Starting Services
         //startActivityForResult(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS),828);
         startService(new Intent(this, MyAccessibilityService.class));
         startService(new Intent(this, MyService.class));
+        startService(new Intent(this, DajoMediaBrowser1.class));
+        startService(new Intent(this, DajoMediaBrowser2.class));
 
         // Crash button
         Button crashButton = new Button(this);
@@ -85,6 +135,8 @@ public class MainActivity extends MyActivityLifecycle {
     @Override
     public void onStart() {
         super.onStart();
+
+        if(test) return;
 
         try {
             AbstractManager[] managers = {

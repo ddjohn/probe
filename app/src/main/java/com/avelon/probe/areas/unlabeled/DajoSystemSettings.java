@@ -30,7 +30,7 @@ public class DajoSystemSettings extends AbstractManager {
         Thread t = new Thread(() -> {
             while(true) {
                 int val = rand.nextInt(255);
-                Log.e(TAG, "run(): " + val);
+                //Log.e(TAG, "run(): " + val);
                 Settings.System.putInt(ctx.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, val);
                 try {
                     Thread.sleep(1000);
