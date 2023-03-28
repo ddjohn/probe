@@ -20,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "DownloadMgr"
-include ':app'
+include ':probe'
 include ':aar-library'
 include ':jar-library'

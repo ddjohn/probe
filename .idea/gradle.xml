@@ -11,8 +11,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/aar-library" />
-            <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/jar-library" />
+            <option value="$PROJECT_DIR$/probe" />
           </set>
         </option>
       </GradleProjectSettings>
