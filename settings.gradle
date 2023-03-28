@@ -16,6 +16,7 @@ dependencyResolutionManagement {
             url "http://10.236.88.232:8088/artifactory/aptiv-libraries/"
             allowInsecureProtocol = true
         }
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "DownloadMgr"

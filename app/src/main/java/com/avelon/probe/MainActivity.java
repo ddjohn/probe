@@ -52,10 +52,10 @@ public class MainActivity extends MyActivityLifecycle {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
-        checkSelfPermission(Manifest.permission.READ_CONTACTS);
+        //checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
+        //checkSelfPermission(Manifest.permission.READ_CONTACTS);
 
-        Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
+        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
         //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_VCARD_URI,null, null, null, null);
         //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_MULTI_VCARD_URI,null, null, null, null);
         //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_MULTI_VCARD_URI,null, null, null, null);
@@ -73,8 +73,8 @@ public class MainActivity extends MyActivityLifecycle {
         } while(cursor.moveToNext());
         cursor.close();
 */
-        TelecomManager telecom = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
-        TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        //TelecomManager telecom = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
+        //TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 
         // Checking Permissions
         permissions = new MyPermissions(this);
@@ -84,7 +84,7 @@ public class MainActivity extends MyActivityLifecycle {
             //return;
         }
 
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        //Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         //startActivityForResult(intent, 9090);
 
 
