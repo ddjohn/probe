@@ -53,27 +53,6 @@ public class MainActivity extends MyActivityLifecycle {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
-        //checkSelfPermission(Manifest.permission.READ_CONTACTS);
-
-        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
-        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_VCARD_URI,null, null, null, null);
-        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_MULTI_VCARD_URI,null, null, null, null);
-        //Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_MULTI_VCARD_URI,null, null, null, null);
-        //Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null, null, null, null);
-/*
-        cursor.moveToFirst();
-        {
-            for(String column : cursor.getColumnNames()) {
-                //Log.e(TAG,"cursor: " + column + " - " + cursor.getString(cursor.getColumnIndex(column)));
-            }
-            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-            Log.e(TAG, "name: " + name);
-            Log.e(TAG, "phone: " + phoneNumber);
-        } while(cursor.moveToNext());
-        cursor.close();
-*/
         //TelecomManager telecom = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
         //TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 

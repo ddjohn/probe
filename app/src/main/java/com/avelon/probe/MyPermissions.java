@@ -20,10 +20,12 @@ public class MyPermissions {
             Manifest.permission.BLUETOOTH_CONNECT,
             Manifest.permission.FOREGROUND_SERVICE,
             Manifest.permission.MEDIA_CONTENT_CONTROL,
+            Manifest.permission.READ_CONTACTS,
             Manifest.permission.READ_LOGS,
             Manifest.permission.READ_PHONE_NUMBERS,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.SYSTEM_ALERT_WINDOW,
+            Manifest.permission.WRITE_CONTACTS,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_SETTINGS,
 
