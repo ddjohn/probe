@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.avelon.probe.areas.managers.DajoMediaSessionManager;
+import com.avelon.probe.areas.managers.DajoNotificationManager;
 import com.avelon.probe.areas.unlabeled.DajoContacts;
 import com.avelon.probe.areas.unlabeled.DajoContentResolver;
 import com.avelon.probe.areas.carmanagers.DajoCarDrivingStateManager;
@@ -61,6 +62,7 @@ public class MyService extends MyServiceLifecycle {
             DajoLocale.class,
             DajoLocationManager.class,
             DajoMediaSessionManager.class,
+            DajoNotificationManager.class,
             DajoPackageManager.class,
             DajoSecureSettings.class,
             DajoStorageManager.class,
