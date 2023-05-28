@@ -23,59 +23,8 @@ public class DajoDownloadManager extends AbstractManager {
 
     @Override
     public void orchestrate() throws Exception {
-        /* Add to Download queue */
-        String url = "https://www.sygic.com/assets/enterprise/img/Sygic_logo.svg";
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        request.setTitle("Title");
-        request.setDescription("Description");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(ctx, Environment.DIRECTORY_MOVIES, "Sygic_logo.svg");
-        manager.enqueue(request);
-
-        /* Query queue */
-        DownloadManager.Query query = new DownloadManager.Query();
-        Cursor cursor = manager.query(query);
-        Log.i(TAG, "count=" + cursor.getCount());
-        int columns[] = {
-                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR),
-                cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION),
-                cursor.getColumnIndex(DownloadManager.COLUMN_ID),
-                cursor.getColumnIndex(DownloadManager.COLUMN_LAST_MODIFIED_TIMESTAMP),
-                cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI),
-                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE),
-                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIAPROVIDER_URI),
-                cursor.getColumnIndex(DownloadManager.COLUMN_REASON),
-                cursor.getColumnIndex(DownloadManager.COLUMN_STATUS),
-                cursor.getColumnIndex(DownloadManager.COLUMN_TITLE),
-                cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES),
-                cursor.getColumnIndex(DownloadManager.COLUMN_URI),
-
-        };
-
-        //for(int i = 0; i < )
-        cursor.moveToFirst();
-       // cursor.
-        while(cursor.moveToNext()) {
-            int i = cursor.getColumnIndex(DownloadManager.COLUMN_ID);
-            Log.i(TAG, "name=" + cursor.getColumnName(i));
-        }
-
-        String s2 = "==> ";
-        for(int c : columns) {
-            s2 += "," + cursor.getColumnName(c);
-        }
-        Log.i(TAG, "name=" + s2);
-
-        while (cursor.moveToNext()) {
-            String s = "";
-            for(int c : columns) {
-                s += "," + cursor.getString(c);
-            }
-            Log.i(TAG, "name=" + s);
-        }
-        cursor.close();
-
-
+        enqueue();
+        printQueue();
 
         //request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
         //request.setAllowedOverRoaming(false);
@@ -106,8 +55,6 @@ public class DajoDownloadManager extends AbstractManager {
         Log.e(TAG, "aaa=" + f.exists());
         File file = new File("/data/oem_data/", filename);
         request.setDestinationUri(Uri.fromFile(file));
-
-
 */
 /*
         File f = new File("/storage/emulated/10/Android/data/com.aptiv.got.downloadmgr/files/");
@@ -203,5 +150,47 @@ public class DajoDownloadManager extends AbstractManager {
         catch(Exception e) {
             Log.e(TAG, "exception", e);
         }
+    }
+
+    private void printQueue() {
+        /* Query queue */
+        DownloadManager.Query query = new DownloadManager.Query();
+        Cursor cursor = manager.query(query);
+        Log.i(TAG, "count=" + cursor.getCount());
+        int columns[] = {
+                cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR),
+                cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION),
+                cursor.getColumnIndex(DownloadManager.COLUMN_ID),
+                cursor.getColumnIndex(DownloadManager.COLUMN_LAST_MODIFIED_TIMESTAMP),
+                cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI),
+                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE),
+                cursor.getColumnIndex(DownloadManager.COLUMN_MEDIAPROVIDER_URI),
+                cursor.getColumnIndex(DownloadManager.COLUMN_REASON),
+                cursor.getColumnIndex(DownloadManager.COLUMN_STATUS),
+                cursor.getColumnIndex(DownloadManager.COLUMN_TITLE),
+                cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES),
+                cursor.getColumnIndex(DownloadManager.COLUMN_URI),
+
+        };
+
+        for(int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            for(int c : columns) {
+                Log.i(TAG, ""+ cursor.getColumnName(c) + "=" + cursor.getString(c));
+            }
+            Log.i(TAG, "----");
+        }
+        cursor.close();
+    }
+
+    private void enqueue() {
+        /* Add to Download queue */
+        String url = "https://www.sygic.com/assets/enterprise/img/Sygic_logo.svg";
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setTitle("Title");
+        request.setDescription("Description");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(ctx, Environment.DIRECTORY_MOVIES, "Sygic_logo.svg");
+        manager.enqueue(request);
     }
 }

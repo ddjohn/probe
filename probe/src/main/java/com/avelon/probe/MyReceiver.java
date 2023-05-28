@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import java.lang.reflect.Field;
 
 public class MyReceiver extends BroadcastReceiver {

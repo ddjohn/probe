@@ -1,32 +1,16 @@
 package com.avelon.probe;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.MediaMetadata;
-import android.media.Session2Token;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
-import android.media.session.MediaSessionManager;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.telecom.TelecomManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.avelon.probe.areas.AbstractManager;
 import com.avelon.probe.areas.services.MyAccessibilityService;
 import com.avelon.probe.areas.services.MyMediaService;
@@ -55,9 +39,6 @@ public class MainActivity extends MyActivityLifecycle {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TelecomManager telecom = (TelecomManager)getSystemService(Context.TELECOM_SERVICE);
-        //TelephonyManager telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-
         // Checking Permissions
         permissions = new MyPermissions(this);
         permissions.request();
@@ -68,7 +49,6 @@ public class MainActivity extends MyActivityLifecycle {
 
         //Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         //startActivityForResult(intent, 9090);
-
 
         // Receivers
         MyReceiver receiver = new MyReceiver(this);

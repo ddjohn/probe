@@ -3,7 +3,6 @@ package com.avelon.probe;
 import android.app.Activity;
 import android.media.browse.MediaBrowser;
 import android.util.Log;
-
 import com.avelon.probe.areas.concepts.qrcode.MyQRCode;
 import com.avelon.probe.areas.concepts.qrcode.MyQRGEncoder;
 import com.avelon.probe.areas.concepts.tls.MutualTlsClient;

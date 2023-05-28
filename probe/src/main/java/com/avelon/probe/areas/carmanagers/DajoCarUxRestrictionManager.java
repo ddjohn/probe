@@ -3,12 +3,15 @@ package com.avelon.probe.areas.carmanagers;
 import android.annotation.SuppressLint;
 import android.car.Car;
 import android.car.drivingstate.CarUxRestrictions;
+import android.car.drivingstate.CarUxRestrictionsConfiguration;
 import android.car.drivingstate.CarUxRestrictionsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.avelon.probe.areas.AbstractManager;
+
+import java.util.List;
 
 public class DajoCarUxRestrictionManager extends AbstractManager implements CarUxRestrictionsManager.OnUxRestrictionsChangedListener {
     private CarUxRestrictionsManager manager;
@@ -31,6 +34,19 @@ public class DajoCarUxRestrictionManager extends AbstractManager implements CarU
     @SuppressLint("MissingPermission")
     @Override
     public void orchestrate() throws Exception {
+
+        List<CarUxRestrictionsConfiguration> configs = manager.getConfigs();
+        configs.forEach(config -> Log.e(TAG, "config=" + config));
+
+        CarUxRestrictions current = manager.getCurrentCarUxRestrictions();
+        Log.e(TAG, "current=" + current);
+
+        String restrictionMode = manager.getRestrictionMode();
+        Log.e(TAG, "restrictionMode=" + restrictionMode);
+
+        List<CarUxRestrictionsConfiguration> configs2 = manager.getStagedConfigs();
+        configs2.forEach(config -> Log.e(TAG, "config2=" + config));
+
         manager.registerListener(new CarUxRestrictionsManager.OnUxRestrictionsChangedListener() {
             @Override
             public void onUxRestrictionsChanged(CarUxRestrictions carUxRestrictions) {
